@@ -1,0 +1,27 @@
+:root {
+    // font
+    --mainfont: "NeoDunggeunGothicPro";
+
+    // color
+    --blue: #04FFFF;
+    --green: #00FF41;
+    --yellow: #FDFF02;
+    --purple: #8A25EA;
+    --white: #FFFFFF;
+    --red: #F44336;
+    
+    --background: #0D0D0D;
+    --subbackground: #333333;
+
+    // style
+    font-family: var(--mainfont);
+    font-size: 14px;
+    line-height: 1.6;
+    font-weight: 400;
+
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-text-size-adjust: 100%;
+}

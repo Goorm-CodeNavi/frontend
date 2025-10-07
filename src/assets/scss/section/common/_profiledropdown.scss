@@ -1,0 +1,40 @@
+.Profiledropdown_wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 183px;
+    border: 1.5px solid var(--green);
+    border-radius: 15px;
+    background-color: var(--background);
+
+    .dropdown_container {
+        margin: 20px 15px;
+        align-items: center;
+
+        .mypage {
+            font-family: var(--mainfont);
+            font-size: 16px;
+            font-weight: 400;
+            color: var(--white);
+            -webkit-appearance: none;
+            appearance: none;
+            text-decoration: none;
+            background: none;
+            border: none;
+        }
+
+        .logout>button {
+            width: 100%;
+            font-family: var(--mainfont);
+            font-size: 16px;
+            font-weight: 400;
+            color: var(--white);
+            -webkit-appearance: none;
+            appearance: none;
+            text-decoration: none;
+            background: none;
+            border: none;
+            margin-top: 30px;
+        }
+    }
+}

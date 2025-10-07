@@ -1,0 +1,67 @@
+.Nav_wrap {
+    width: 100vw;
+    height: 100px;
+    position: relative;
+    background-color: var(--subbackground);
+
+    .container {
+        display: flex;
+        position: relative;
+        align-items: center;
+        justify-content: space-between;
+        padding-top: 10px;
+
+        .nav_left {
+            padding-left: 85px;
+            align-content: center;
+
+            .logo {
+                height: 56px;
+                padding-top: 12px;
+            }
+        }
+
+        .nav_right {
+            display: flex;
+            align-items: center;
+            gap: 211px;
+
+            .menu_button {
+                .nav_bank {
+                    font-family: var(--mainfont);
+                    font-size: 20px;
+                    font-weight: 400;
+                    color: var(--white);
+                    -webkit-appearance: none;
+                    appearance: none;
+                    text-decoration: none;
+                }
+            }
+
+            .nav_profile {
+                width: 80px;
+                height: 80px;
+                padding-right: 69px;
+                cursor: pointer;
+            }
+
+            .nav_login {
+                font-family: var(--mainfont);
+                font-size: 20px;
+                font-weight: 400;
+                color: var(--white);
+                text-decoration: none;
+                padding-right: 69px;
+                cursor: pointer;
+                
+            }
+        }
+    }
+
+    .toggle {
+        position: absolute;
+        z-index: 999;
+        top: 105px;
+        right: 69px;
+    }
+}

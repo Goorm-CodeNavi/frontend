@@ -1,0 +1,16 @@
+@charset "UTF-8";
+
+@use "../section/common/main";
+@use "../setting/var";
+
+// common components
+@use "../section/common/nav";
+@use "../section/common/profiledropdown";
+
+// section
+@use "../section/bank/bank";
+@use "../section/home/home";
+@use "../section/mypage/mypage";
+@use "../section/signin/signin";
+@use "../section/signup/signup";
+@use "../section/solve/solve";
