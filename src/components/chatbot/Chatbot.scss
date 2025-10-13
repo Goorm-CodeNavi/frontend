@@ -1,0 +1,115 @@
+.chatbot-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 999;
+
+  /* 💬 챗봇 아이콘 버튼 */
+  .chatbot-icon {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s;
+
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
+
+  /* 💭 챗봇 창 */
+  .chat-window {
+    position: absolute;
+    bottom: 80px;
+    right: 0;
+    width: 320px;
+    height: 420px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transform: translateY(20px);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.4s ease; // ✅ 부드러운 슬라이드
+
+    &.open {
+      transform: translateY(0);
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* 헤더 */
+    .chat-header {
+      background-color: #007bff;
+      color: white;
+      padding: 10px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    /* 본문 */
+    .chat-body {
+      flex: 1;
+      padding: 10px;
+      overflow-y: auto;
+      background-color: #f8f9fa;
+    }
+
+    /* 메시지 말풍선 */
+    .chat-message {
+      max-width: 80%;
+      padding: 8px 12px;
+      border-radius: 12px;
+      margin-bottom: 10px;
+      line-height: 1.4;
+
+      &.user {
+        align-self: flex-end;
+        background-color: #007bff;
+        color: white;
+        border-bottom-right-radius: 2px;
+      }
+
+      &.bot {
+        align-self: flex-start;
+        background-color: #e9ecef;
+        color: black;
+        border-bottom-left-radius: 2px;
+      }
+    }
+
+    /* 입력 영역 */
+    .chat-input-area {
+      display: flex;
+      border-top: 1px solid #ddd;
+
+      input {
+        flex: 1;
+        border: none;
+        padding: 10px;
+        outline: none;
+      }
+
+      button {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 16px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+
+        &:hover {
+          background-color: #0056b3;
+        }
+      }
+    }
+  }
+}
