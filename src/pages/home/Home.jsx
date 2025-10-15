@@ -3,14 +3,61 @@ import MainLogo from '../../assets/img/ic_mainlogo.svg';
 import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(true);
     const navigate = useNavigate();
+
+    // 더미데이터
+    const userName = "aster03";
+    const together = 57;
+    const problemNumber = 1003;
+    const problemTitle = "피보나치 함수";
 
     return (
         <div className='Home_wrap'>
             <div className="body">
                 {isLoggedIn ? (
-                    <p>로그인 후 홈 화면입니다.</p>
+                    <div className="after">
+                        <div className="title">
+                            <h2>AI와 함께 성장하는 나만의 코딩 학습 파트너, </h2>
+                            <img src={MainLogo} alt="MainLogo" />
+                        </div>
+                        <div className="contents">
+                            <div className="first_content">
+                                <div className="first_subtitle">안녕하세요, <div className="name">{userName}</div>님!</div>
+                                <div className="content_wrap">
+                                    <div className="together_day">
+                                        <div className="logo">CODENAVI</div>
+                                        <div className="text">와 함께 한 지</div>
+                                        <div className="date">{together}</div>
+                                        <div className="text">일이 되었군요!</div>
+                                    </div>
+                                    <div className="goto_notion">
+                                        <div className="wanna_see">나의 학습 과정을 보고 싶다면</div>
+                                        <div className="notion_hyper">Notion으로 바로 가기</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="second_content">
+                                <div className="second_subtitle">
+                                    <div className="logo">CODENAVI</div>
+                                    <div className="subtitle">에서 추천하는 오늘의 문제를 풀어보세요</div>
+                                </div>
+                                <div className="today">
+                                    <div className="problem_title">
+                                        <div className="problem_info">
+                                            <div className="number">{problemNumber}</div>
+                                            <div className="name">{problemTitle}</div>
+                                        </div>
+                                        <div className="goto_solve">문제 풀기</div>
+                                    </div>
+                                    <div className="problem_content">
+                                        {/* TODO: 문제 받아오기 */}
+                                        문제에 대한 내용을 띄워주는 공간입니다.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 ) : (
                     <div className="before">
                         <div className="title">
