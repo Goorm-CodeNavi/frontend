@@ -1,0 +1,125 @@
+.Bank_wrap {
+    display: flex;
+    padding: 60px 360px 120px 50px;
+
+    aside {
+        display: flex;
+        flex-direction: column;
+        margin-top: 80px;
+        padding: 22px 60px;
+        border-radius: 28px;
+        border: 1.5px solid var(--blue);
+        align-items: center;
+
+        .category {
+            color: var(--white);
+            font-size: 16px;
+            font-weight: 400;
+        }
+
+        .algorithms {
+            margin-top: 19px;
+            color: var(--white);
+            font-size: 13px;
+            font-weight: 400;
+            text-align: center;
+        }
+    }
+
+    main {
+        width: 100%;
+        margin-left: 50px;
+
+        .main_header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            .title {
+                font-size: 20px;
+                font-weight: 400;
+                color: var(--white);
+            }
+
+            .search_bar {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 10px 20px;
+                background-color: var(--subbackground);
+                border-radius: 28px;
+                border: 1.5px solid var(--blue);
+
+                .search {
+                    width: 256px;
+                    height: 14px;
+                    border: 0;
+                    padding: 0;
+                    margin: 0;
+                    background-color: transparent;
+                    color: var(--white);
+                    font-size: 14px;
+                    font-weight: 400;
+                    font-family: var(--mainfont);
+                }
+
+                .search::placeholder {
+                    color: #838383;
+                    font-size: 14px;
+                    font-weight: 400;
+                    font-family: var(--mainfont);
+                }
+
+                img {
+                    margin-left: 20px;
+                    width: 20px;
+                }
+            }
+        }
+
+        .main_body {
+            display: flex;
+            flex-direction: column;
+            margin-top: 40px;
+
+            .level_toggle {
+                display: flex;
+                margin-left: auto;
+                padding: 8px 12px 8px 20px;
+                border-radius: 15px;
+                border: 1.5px solid var(--purple);
+                background-color: var(--subbackground);
+
+                .level {
+                    font-size: 14px;
+                    font-weight: 400;
+                    color: var(--white);
+                }
+
+                img {
+                    margin-left: 15px;
+                    width: 20px;
+                }
+            }
+
+            .bank {
+                margin-top: 28px;
+                border-top: 1.5px solid var(--green);
+                border-bottom: 1.5px solid var(--green);
+                background-color: var(--subbackground);
+                padding: 25px 33px;
+            }
+        }
+
+        .main_footer {
+            display: flex;
+            width: 100%;
+            margin-top: 20px;
+            justify-content: center;
+
+            .pagination {
+                display: flex;
+            }
+        }
+    }
+}
