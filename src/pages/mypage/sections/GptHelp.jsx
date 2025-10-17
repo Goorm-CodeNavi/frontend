@@ -1,11 +1,11 @@
 import React from 'react'
 
-const LinkNotion = () => {
+const GptHelp = () => {
     return (
         <div className='LinkNotion_wrap'>
-            Notion 연동하기 페이지입니다.
+            GPT에게 도움받기 페이지입니다.
         </div>
     )
 }
 
-export default LinkNotion
+export default GptHelp

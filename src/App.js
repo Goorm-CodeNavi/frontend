@@ -6,7 +6,7 @@ import SignIn from "./pages/signin/SignIn";
 import MyPage from "./pages/mypage/MyPage";
 import StudyRecord from "./pages/mypage/sections/StudyRecord";
 import EditInfo from "./pages/mypage/sections/EditInfo";
-import LinkNotion from "./pages/mypage/sections/LinkNotion";
+import GptHelp from "./pages/mypage/sections/GptHelp";
 
 function App() {
   return (
@@ -20,7 +20,7 @@ function App() {
           <Route index element={<Navigate to="study" replace />} />
           <Route path="study" element={<StudyRecord />} />
           <Route path="edit" element={<EditInfo />} />
-          <Route path="notion" element={<LinkNotion />} />
+          <Route path="gpt" element={<GptHelp />} />
         </Route>
       </Route>
     </Routes>
