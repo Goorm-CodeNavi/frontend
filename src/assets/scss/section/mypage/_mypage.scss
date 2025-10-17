@@ -336,3 +336,21 @@
         }
     }
 }
+
+.EditInfo_wrap {
+    width: 100%;
+    margin-left: 50px;
+
+    .main_header {
+        font-size: 20px;
+        font-weight: 400;
+        color: var(--white);
+    }
+
+    .main_body {
+        margin-left: 40px;
+        margin-right: 40px;
+
+        
+    }
+}
