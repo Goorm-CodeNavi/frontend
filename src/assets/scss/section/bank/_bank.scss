@@ -6,7 +6,8 @@
         display: flex;
         flex-direction: column;
         margin-top: 80px;
-        padding: 22px 60px;
+        width: 260px;
+        padding: 22px 30px;
         border-radius: 28px;
         border: 1.5px solid var(--blue);
         align-items: center;
@@ -18,11 +19,21 @@
         }
 
         .algorithms {
+            display: flex;
+            flex-direction: column;
             margin-top: 19px;
-            color: var(--white);
-            font-size: 13px;
-            font-weight: 400;
-            text-align: center;
+
+            .algo_item {
+                color: var(--white);
+                font-size: 13px;
+                font-weight: 400;
+                text-align: center;
+                cursor: pointer;
+
+                &.selected {
+                    color: var(--green);
+                }
+            }
         }
     }
 
@@ -73,6 +84,7 @@
                 img {
                     margin-left: 20px;
                     width: 20px;
+                    cursor: pointer;
                 }
             }
         }
@@ -85,6 +97,7 @@
             .level_toggle_wrap {
                 position: relative;
                 margin-left: auto;
+                cursor: pointer;
 
                 .level_toggle {
                     display: flex;
@@ -120,6 +133,103 @@
                 border-bottom: 1.5px solid var(--green);
                 background-color: var(--subbackground);
                 padding: 25px 33px;
+
+                &.empty {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    min-height: 614px;
+                }
+
+                .no_results {
+                    color: var(--white);
+                    font-size: 14px;
+                    font-weight: 400;
+                    text-align: center;
+                }
+
+                &.has_table {
+                    display: block;
+                }
+
+                .problem_lists {
+                    width: 100%;
+                    border-collapse: separate;
+                    border-spacing: 0 5px;
+                    color: var(--white);
+
+                    .thead_spacer td {
+                        padding: 0;
+                        background: none;
+                        border-radius: 0;
+                        line-height: 0;
+                    }
+
+                    th, td {
+                        text-align: center;
+                        font-size: 14px;
+                        font-weight: 400;
+                    }
+
+                    /* 열 비율 조정 */
+                    th:nth-child(1),
+                    td:nth-child(1) {
+                        width: 15%;  // 문제 번호
+                    }
+
+                    th:nth-child(2),
+                    td:nth-child(2) {
+                        width: 30%;  // 문제 제목
+                        text-align: start;
+                    }
+
+                    td:nth-child(2) {
+                        cursor: pointer;
+                    }
+
+                    th:nth-child(3),
+                    td:nth-child(3) {
+                        width: 40%;  // 카테고리
+                    }
+
+                    th:nth-child(4),
+                    td:nth-child(4) {
+                        width: 15%;  // 정보
+                    }
+
+                    thead tr, th {
+                        padding: 0;
+                    }
+
+                    tbody td {
+                        background-color: var(--background);
+                        padding-top: 15px;
+                        padding-bottom: 15px;
+                    }
+
+                    tbody tr td:first-child {
+                        border-top-left-radius: 15px;
+                        border-bottom-left-radius: 15px;
+                    }
+
+                    tbody tr td:last-child {
+                        border-top-right-radius: 15px;
+                        border-bottom-right-radius: 15px;
+                    }
+
+                    .category_tag {
+                        border: 1.5px solid var(--yellow);
+                        border-radius: 15px;
+                        padding: 10px 15px;
+                        color: var(--white);
+                        font-size: 13px;
+                        font-weight: 400;
+                    }
+
+                    tbody tr.filler-row {
+                        visibility: hidden;         // 내용/보더 안 보이게
+                    }
+                }
             }
         }
 
@@ -131,6 +241,36 @@
 
             .pagination {
                 display: flex;
+                align-items: center;
+                justify-content: center;
+
+                .nav_btn {
+                    width: 20px;
+                    background-color: transparent;
+                    border: 0;
+                    cursor: pointer;
+                    margin: 0 10px;
+                }
+
+                .page-btn {
+                    display: flex;
+                    min-width: 30px;
+                    height: 30px;
+                    border-radius: 10px;
+                    border: 0;
+                    font-family: var(--mainfont);
+                    font-size: 16px;
+                    font-weight: 400;
+                    background-color: transparent;
+                    color: var(--white);
+                    align-items: center;
+                    justify-content: center;
+
+                    &.active {
+                        background-color: var(--blue);
+                        color: var(--white);
+                    }
+                }
             }
         }
     }
