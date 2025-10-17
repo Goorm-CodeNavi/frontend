@@ -1,8 +1,34 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Search from '../../assets/img/ic_search.svg';
 import Toggle from '../../assets/img/ic_arrow_down.svg';
+import BankModal from './BankModal';
 
 const Bank = () => {
+    const [isOpen, setIsOpen] = useState(false);
+    const [selectedLevel, setSelectedLevel] = useState('Easy');
+    const wrapRef = useRef(null);
+
+    const handleToggle = () => {
+        setIsOpen(v => !v);
+    }
+
+    const handleSelectLevel = (levelLabel) => {
+        const levelOnly = levelLabel.split(' ')[0];
+        setSelectedLevel(levelOnly);
+        setIsOpen(false);
+    };
+
+    // 바깥 클릭 시 닫기
+    useEffect(() => {
+        const onClickOutside = (e) => {
+            if (wrapRef.current && !wrapRef.current.contains(e.target)) {
+                setIsOpen(false);
+            }
+        };
+        document.addEventListener('mousedown', onClickOutside);
+        return () => document.removeEventListener('mousedown', onClickOutside);
+    }, []);
+
     return (
         <div className='Bank_wrap'>
             <aside>
@@ -20,9 +46,18 @@ const Bank = () => {
                     </div>
                 </div>
                 <div className="main_body">
-                    <div className="level_toggle">
-                        <div className="level">Easy</div>
-                        <img src={Toggle} alt="Toggle" />
+                    <div className="level_toggle_wrap">
+                        <div className="level_toggle" onClick={handleToggle}>
+                            <div className="level">{selectedLevel}</div>
+                            <img src={Toggle} alt="Toggle" />
+                        </div>
+
+                        {/* 모달 */}
+                        {isOpen && (
+                            <div className="level_dropdown">
+                                <BankModal onSelect={handleSelectLevel} />
+                            </div>
+                        )}
                     </div>
                     <div className="bank">
                         <table className="problem_lists">

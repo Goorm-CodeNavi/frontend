@@ -82,23 +82,35 @@
             flex-direction: column;
             margin-top: 40px;
 
-            .level_toggle {
-                display: flex;
+            .level_toggle_wrap {
+                position: relative;
                 margin-left: auto;
-                padding: 8px 12px 8px 20px;
-                border-radius: 15px;
-                border: 1.5px solid var(--purple);
-                background-color: var(--subbackground);
 
-                .level {
-                    font-size: 14px;
-                    font-weight: 400;
-                    color: var(--white);
+                .level_toggle {
+                    display: flex;
+                    margin-left: auto;
+                    padding: 8px 12px 8px 20px;
+                    border-radius: 15px;
+                    border: 1.5px solid var(--purple);
+                    background-color: var(--subbackground);
+
+                    .level {
+                        font-size: 14px;
+                        font-weight: 400;
+                        color: var(--white);
+                    }
+
+                    img {
+                        margin-left: 15px;
+                        width: 20px;
+                    }
                 }
 
-                img {
-                    margin-left: 15px;
-                    width: 20px;
+                .level_dropdown {
+                    position: absolute;
+                    z-index: 999;
+                    top: calc(100% + 8px);
+                    right: 0;
                 }
             }
 
@@ -120,6 +132,46 @@
             .pagination {
                 display: flex;
             }
+        }
+    }
+}
+
+.BankModal_wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 107px;
+    border: 1.5px solid var(--purple);
+    border-radius: 15px;
+    background-color: var(--subbackground);
+
+    .modal_container {
+        padding: 10px 15px;
+
+        .easy {
+            font-size: 14px;
+            font-weight: 400;
+            color: var(--white);
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .medium {
+            margin-top: 15px;
+            font-size: 14px;
+            font-weight: 400;
+            color: var(--white);
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .hard {
+            margin-top: 15px;
+            font-size: 14px;
+            font-weight: 400;
+            color: var(--white);
+            cursor: pointer;
+            text-align: center;
         }
     }
 }
