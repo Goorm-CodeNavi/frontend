@@ -25,9 +25,11 @@ const Solve = () => {
 
     const [showCanvas, setShowCanvas] = useState(false); // true면 코드 에디터 보임
     const [isEdited, setIsEdited] = useState(false); // 저장 버튼 누름 여부
-    const [showModal, setShowModal] = useState(false); // 모달창 표시 여부
+    const [showRunModal, setShowRunModal] = useState(false); // 모달창 표시 여부
+    const [showSubmitModal, setShowSubmitModal] = useState(false);
     const [modalShownOnce, setModalShownOnce] = useState(false); // 모달 1회만 표시
     const [aiEnabled, setAiEnabled] = useState(false); // AI 해설 버튼 활성화 여부
+    const [showAI, setShowAI] = useState(false); // false = 문제 영역, true = AI 해설 영역
     const [code, setCode] = useState("// JS 코드를 입력하고 실행 버튼을 눌러보세요\nconsole.log('Hello IDE!');");
     const [output, setOutput] = useState("");
 
@@ -42,33 +44,42 @@ const Solve = () => {
     // 코드 실행
     const runCode = () => {
         try {
-        let logs = [];
-        const originalLog = console.log;
-        console.log = (...args) => logs.push(args.join(" "));
+            let logs = [];
+            const originalLog = console.log;
+            console.log = (...args) => logs.push(args.join(" "));
 
-        const result = eval(code);
-        console.log = originalLog;
+            const result = eval(code);
+            console.log = originalLog;
 
-        setOutput(
-            logs.join("\n") + (result !== undefined ? `\n결과: ${result}` : "")
-        );
+            setOutput(
+                logs.join("\n") + (result !== undefined ? `\n결과: ${result}` : "")
+            );
 
-        // ✅ 처음 한 번만 모달 표시
-        if (!modalShownOnce) {
-            setShowModal(true);
-            setModalShownOnce(true);
+            // ✅ 처음 한 번만 모달 표시
+            if (!modalShownOnce) {
+                setShowRunModal(true);
+                setModalShownOnce(true);
+            }
+
+            // ✅ 실행 후 AI 해설 버튼 활성화
+            setAiEnabled(true);
+            console.log("실행 완료 → AI 해설 보기 버튼 활성화됨");
+            } catch (err) {
+            setOutput("에러: " + err.message);
         }
+    };
 
-        // ✅ 실행 후 AI 해설 버튼 활성화
-        setAiEnabled(true);
-        } catch (err) {
-        setOutput("에러: " + err.message);
+    // ✅ AI 해설 보기/문제 보기 전환
+    const handleToggleAI = () => {
+        if (setAiEnabled) {
+            setShowAI((prev) => !prev);
+            setShowAIComment((prev) => !prev);
         }
     };
 
     const handleSubmit = () => {
-        clearInterval(timerId);
-        navigate("/bank");
+        //clearInterval(timerId);
+        setShowSubmitModal(true);
     };
 
     return (
@@ -82,15 +93,16 @@ const Solve = () => {
 
             {/* ✅ AI 해설 버튼 (초기 비활성화) */}
             <button
-                className="AI-commentary"
+                className="AI-commentary-btn"
                 disabled={!aiEnabled}
+                onClick={handleToggleAI}
                 style={{
                 opacity: aiEnabled ? 1 : 0.5,
                 cursor: aiEnabled ? "pointer" : "not-allowed",
                 color: "white",
                 }}
             >
-                AI 해설 보기
+                {showAI ? "문제 보기" : "AI 해설 보기"}
             </button>
             </div>
 
@@ -105,7 +117,7 @@ const Solve = () => {
                 />
                 <span className="slider"></span>
                 </label>
-                <button className="code-btn">코드 입력</button>
+                <span>코드입력</span>
             </div>
             </div>
         </div>
@@ -113,38 +125,36 @@ const Solve = () => {
         {/* 메인 콘텐츠 */}
         <div className="main-content">
             <div className="left-sections">
-            {/* 🔹 문제 영역 */}
-            {!showAIComment && (
-                <>
-                <section className="problem-section">
-                    <h2>문제</h2>
-                    <div className="content-box">문제 내용이 들어갑니다.</div>
-                </section>
+                {/* 🔹 문제 영역 */}
+                {!showAIComment && (
+                    <>
+                    <section className="problem-section">
+                        <h2>문제</h2>
+                        <div className="content-box">문제 내용이 들어갑니다.</div>
+                    </section>
 
-                <section className="condition-section">
-                    <h2>조건</h2>
-                    <div className="content-box">조건 내용</div>
-                </section>
+                    <section className="condition-section">
+                        <h2>조건</h2>
+                        <div className="content-box">조건 내용</div>
+                    </section>
 
-                <section className="io-section">
-                    <h2>입력</h2>
-                    <div className="content-box">입력 설명</div>
-                    <h2>출력</h2>
-                    <div className="content-box">출력 설명</div>
-                </section>
+                    <section className="io-section">
+                        <h2>입력</h2>
+                        <div className="content-box">입력 설명</div>
+                        <h2>출력</h2>
+                        <div className="content-box">출력 설명</div>
+                    </section>
 
-                <section className="example-section">
-                    <h2>입출력 예시 1</h2>
-                    <div className="content-box">예시 내용</div>
-                    <h2>입출력 예시 2</h2>
-                    <div className="content-box">예시 내용</div>
-                </section>
-                </>
-            )}
+                    <section className="example-section">
+                        <h2>입출력 예시 1</h2>
+                        <div className="content-box">예시 내용</div>
+                        <h2>입출력 예시 2</h2>
+                        <div className="content-box">예시 내용</div>
+                    </section>
+                    </>
+                )}
 
             {/* ✅ AI 해설 표시 영역 */}
-            {showAIComment && (
-                <>
                 {showAIComment && (
                     <section className="ai-comment-canvas">
                         <h2>AI 모범답안</h2>
@@ -173,8 +183,6 @@ const Solve = () => {
                         </div>
                     </section>
                 )}
-                </>
-            )}
             </div>
 
             <div className="right-panel">
@@ -241,24 +249,46 @@ const Solve = () => {
         </div>
 
         {/* ✅ 모달창 (처음 실행 시 1회 표시) */}
-        {showModal && (
+        {showRunModal && (
         <div className="modal-overlay">
             <div className="modal-content">
-            <h2>AI 해설 기능 안내</h2>
-            <p>
-                {`AI가 생성한 모범 답안(접근방식, 최적화 전략, 코드)를 볼 수 있습니다.\n이를 통해 어떤 부분을 개선할 수 있을지 스스로 분석하고\nAI로부터 상세한 비드백을 받을 수 있습니다.`}
-            </p>
+                <h2>AI 해설 기능 안내</h2>
+                <p>
+                    {`AI가 생성한 모범 답안(접근방식, 최적화 전략, 코드)를 볼 수 있습니다.\n이를 통해 어떤 부분을 개선할 수 있을지 스스로 분석하고\nAI로부터 상세한 비드백을 받을 수 있습니다.`}
+                </p>
 
-            <div className="modal-buttons">
-                {/* 닫기 버튼 */}
-                <button onClick={() => setShowModal(false)}>닫기</button>
+                <div className="modal-buttons">
+                    {/* 닫기 버튼 */}
+                    <button onClick={() => setShowRunModal(false)}>닫기</button>
 
-                {/* AI 해설 보기 버튼 */}
-                <button onClick={() => {
-                    setShowModal(false);
-                    setShowAIComment(true);
-                }}>AI 해설 보기</button>
+                    {/* AI 해설 보기 버튼 */}
+                    <button onClick={() => {
+                        setShowRunModal(false);
+                        setShowAIComment(true);
+                    }}>AI 해설 보기</button>
+                </div>                                                  
             </div>
+        </div>
+        )}
+
+        {showSubmitModal && (
+        <div className="modal-overlay">
+            <div className="modal-content">
+                <h2>코드가 제출되었습니다.</h2>
+                <p>
+                    {`성공`}
+                </p>
+
+                <div className="modal-buttons">
+                    {/* 닫기 버튼 */}
+                    <button onClick={() => setShowSubmitModal(false)}>닫기</button>
+
+                    {/* AI 해설 보기 버튼 */}
+                    {/* <button onClick={() => {
+                        setShowRunModal(false);
+                        setShowAIComment(true);
+                    }}>AI 해설 보기</button> */}
+                </div>                                                  
             </div>
         </div>
         )}

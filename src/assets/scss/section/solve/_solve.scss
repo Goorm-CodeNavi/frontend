@@ -39,7 +39,7 @@
         font-weight: bold;
       }
 
-      .AI-commentary {
+      .AI-commentary-btn {
         background-color: #1a1a1a;
         border: 1px solid #04FFFF;
         border-radius: 8px;
@@ -106,21 +106,6 @@
           }
         }
       }
-
-      .code-btn {
-        background-color: #04FFFF;
-        color: #000;
-        border: none;
-        border-radius: 8px;
-        padding: 6px 16px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: 0.2s;
-
-        &:hover {
-          background-color: #00ccaa;
-        }
-      }
     }
   }
 
@@ -147,7 +132,7 @@
         padding: 15px;
 
         h2 {
-          color: #04FFFF;
+          //color: #04FFFF;
           margin-bottom: 8px;
         }
 
@@ -158,42 +143,42 @@
           min-height: 60px;
         }
       }
-    }
 
-    .ai-comment-canvas {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-      background-color: #111;
-      border: 1px solid #8A25EA;
-      border-radius: 10px;
-      padding: 20px;
-    
-      h2 {
-        color: #8A25EA;
-        margin-bottom: 15px;
-      }
-    
-      .canvas-item {
+      .ai-comment-canvas {
         display: flex;
         flex-direction: column;
-        gap: 5px;
-    
-        h3 {
+        gap: 15px;
+        background-color: #111;
+        border: 1px solid #8A25EA;
+        border-radius: 10px;
+        padding: 20px;
+      
+        h2 {
           color: #8A25EA;
-          font-size: 1rem;
+          margin-bottom: 15px;
         }
-    
-        textarea {
-          background-color: #1a1a1a;
-          border: 1px solid #8A25EA;
-          border-radius: 8px;
-          color: white;
-          padding: 10px;
-          min-height: 120px;
-          resize: none;
-          font-family: "Pretendard", sans-serif;
-          white-space: pre-wrap;
+      
+        .canvas-item {
+          display: flex;
+          flex-direction: column;
+          gap: 5px;
+      
+          h3 {
+            color: #8A25EA;
+            font-size: 1rem;
+          }
+      
+          textarea {
+            background-color: #1a1a1a;
+            border: 1px solid #8A25EA;
+            border-radius: 8px;
+            color: white;
+            padding: 10px;
+            min-height: 120px;
+            resize: none;
+            font-family: "Pretendard", sans-serif;
+            white-space: pre-wrap;
+          }
         }
       }
     }
