@@ -7,6 +7,7 @@ import MyPage from "./pages/mypage/MyPage";
 import StudyRecord from "./pages/mypage/sections/StudyRecord";
 import EditInfo from "./pages/mypage/sections/EditInfo";
 import GptHelp from "./pages/mypage/sections/GptHelp";
+import Solve from "./pages/solve/Solve";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           <Route path="edit" element={<EditInfo />} />
           <Route path="gpt" element={<GptHelp />} />
         </Route>
+        <Route path="/solve" element={<Solve />} />
       </Route>
     </Routes>
   );
