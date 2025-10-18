@@ -15,9 +15,9 @@ function App() {
         <Route index element={<Navigate to="/home" replace />} />
         <Route path="/home" element={<Home />} />
         <Route path="/bank" element={<Bank />} />
-        <Route path="/LogIn" element={<LogIn />} />
-        <Route path="/SignUp" element={<SignUp />} />
-        <Route path="/findid" element={<FindId />} />
+        <Route path="/login" element={<LogIn />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/find-id" element={<FindId />} />
         <Route path="/passwordreset" element={<PasswordReset />} />
         <Route path="/mypage" element={<MyPage />} />
       </Route>
