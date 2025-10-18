@@ -1,0 +1,95 @@
+.signup_wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: var(--background);
+
+  // style
+  font-family: var(--mainfont);
+  font-size: 14px;
+  line-height: 1.6;
+  font-weight: 400;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+.signup-title {
+  font-size: 2.2rem;
+  color: var(--white);
+  text-align: center;
+  font-weight: 600;
+}
+// 입력 그룹
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+
+  .input-label {
+    font-size: 1rem;
+    color: var(--white);
+  }
+
+  .input-container {
+    display: flex;
+    gap: 8px;
+    color: var(--green);
+
+    .signup-input {
+      flex: 1;
+      padding: 12px 16px;
+      border-radius: 8px;
+      border: 1px solid var(--green);
+      background-color: transparent;
+      color: var(--background);
+      font-size: 0.8rem;
+
+      &::placeholder {
+        color: var(--text-placeholder, #777);
+      }
+    }
+
+    .check-button {
+      padding: 10px 14px;
+      background-color: var(--primary);
+      color: var(--white);
+      border: 1px solid var(--green);
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: 0.2s;
+
+      &:hover {
+        opacity: 0.9;
+      }
+    }
+  }
+
+  .error-message {
+    font-size: 0.8rem;
+    color: var(--red);
+  }
+}
+
+// 제출 버튼
+.submit-button {
+  width: 100%;
+  padding: 12px;
+  font-size: 1rem;
+  color: var(--white);
+  border-radius: 8px;
+  border: 1px solid var(--green);
+  background-color: transparent;
+
+  cursor: pointer;
+  transition: 0.2s;
+
+  &:hover {
+    opacity: 0.9;
+  }
+}
