@@ -350,7 +350,331 @@
     .main_body {
         margin-left: 40px;
         margin-right: 40px;
+        margin-top: 50px;
 
-        
+        .edit_id {
+            display: flex;
+            flex-direction: column;
+
+            .title {
+                font-size: 16px;
+                font-weight: 400;
+                color: var(--white);
+            }
+
+            .id {
+                width: 100%;
+                display: flex;
+                justify-content: space-between;
+                margin-top: 14px;
+                gap: 24px;
+
+                .id_input {
+                    flex: 1;
+                    padding: 25px 30px;
+                    font-size: 14px;
+                    font-weight: 400;
+                    font-family: var(--mainfont);
+                    color: var(--white);
+                    border-radius: 15px;
+                    border: 1.5px solid var(--green);
+                    background-color: var(--background);
+                    outline: none;
+                }
+
+                .id_input::placeholder {
+                    font-size: 14px;
+                    font-weight: 400;
+                    font-family: var(--mainfont);
+                    color: #838383;
+                }
+
+                .dupl_btn {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 134px;
+                    padding: 25px 0;
+                    font-size: 14px;
+                    font-weight: 400;
+                    color: var(--white);
+                    border-radius: 15px;
+                    border: 1.5px solid var(--green);
+                    background-color: var(--background);
+                    cursor: pointer;
+                }
+            }
+            
+            .warning {
+                margin-left: 5px;
+                margin-top: 10px;
+                font-size: 14px;
+                font-weight: 400;
+                color: var(--red);
+            }
+        }
+
+        .edit_pw {
+            margin-top: 38px;
+
+            .title {
+                font-size: 16px;
+                font-weight: 400;
+                color: var(--white);
+            }
+
+            .new_pw {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                margin-top: 14px;
+                padding: 25px 30px;
+                border-radius: 15px;
+                border: 1.5px solid var(--green);
+
+                .pw_input {
+                    flex: 1;
+                    padding: 0;
+                    margin: 0;
+                    font-size: 14px;
+                    font-weight: 400;
+                    font-family: var(--mainfont);
+                    color: var(--white);
+                    outline: none;
+                    border: 0;
+                    background-color: transparent;
+
+                    input {
+                        width: 100%;
+                        padding: 0;
+                        margin: 0;
+                        font-size: 14px;
+                        font-weight: 400;
+                        font-family: var(--mainfont);
+                        color: var(--white);
+                        outline: none;
+                        border: 0;
+                        background-color: transparent;
+                    }
+
+                    input::placeholder {
+                        padding: 0;
+                        margin: 0;
+                        font-size: 14px;
+                        font-weight: 400;
+                        font-family: var(--mainfont);
+                        color: #838383;
+                        outline: none;
+                    }
+                }
+            }
+
+            .check_new_pw {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                margin-top: 5px;
+                padding: 25px 30px;
+                border-radius: 15px;
+                border: 1.5px solid var(--green);
+
+                .pw_input {
+                    flex: 1;
+                    padding: 0;
+                    margin: 0;
+                    font-size: 14px;
+                    font-weight: 400;
+                    font-family: var(--mainfont);
+                    color: var(--white);
+                    outline: none;
+                    border: 0;
+                    background-color: transparent;
+
+                    input {
+                        width: 100%;
+                        padding: 0;
+                        margin: 0;
+                        font-size: 14px;
+                        font-weight: 400;
+                        font-family: var(--mainfont);
+                        color: var(--white);
+                        outline: none;
+                        border: 0;
+                        background-color: transparent;
+                    }
+
+                    input::placeholder {
+                        padding: 0;
+                        margin: 0;
+                        font-size: 14px;
+                        font-weight: 400;
+                        font-family: var(--mainfont);
+                        color: #838383;
+                        outline: none;
+                    }
+                }
+            }
+
+            .warning {
+                margin-left: 5px;
+                margin-top: 10px;
+                font-size: 14px;
+                font-weight: 400;
+                color: var(--red);
+            }
+        }
+
+        .edit_email {
+            margin-top: 38px;
+
+            .title {
+                font-size: 16px;
+                font-weight: 400;
+                color: var(--white);
+            }
+
+            .email_input {
+                margin-top: 14px;
+                padding: 25px 30px;
+                font-size: 14px;
+                font-weight: 400;
+                font-family: var(--mainfont);
+                color: var(--white);
+                border-radius: 15px;
+                border: 1.5px solid var(--green);
+                background-color: var(--background);
+                outline: none;
+
+                input {
+                    width: 100%;
+                    padding: 0;
+                    margin: 0;
+                    font-size: 14px;
+                    font-weight: 400;
+                    font-family: var(--mainfont);
+                    color: var(--white);
+                    outline: none;
+                    border: 0;
+                    background-color: transparent;
+                }
+
+                input::placeholder {
+                    font-size: 14px;
+                    font-weight: 400;
+                    font-family: var(--mainfont);
+                    color: #838383;
+                    background-color: var(--background);
+                    outline: none;
+                }
+            }
+
+        }
+
+        .marketing {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 38px;
+
+            .title {
+                font-size: 16px;
+                font-weight: 400;
+                color: var(--white);
+            }
+
+            .agrees {
+                display: flex;
+                align-items: center;
+                gap: 26px;
+                padding-right: 17px;
+
+                .agree {
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+
+                    .agree_email {
+                        width: 20px;
+                        height: 20px;
+                        background-color: transparent;
+                    }
+
+                    .text {
+                        font-size: 12px;
+                        font-weight: 400;
+                        color: var(--white);
+                    }
+                }
+            }
+        }
+
+        .link_notion {
+            width: 100%;
+            margin-top: 38px;
+
+            .title {
+                font-size: 16px;
+                font-weight: 400;
+                color: var(--white);
+            }
+
+            .link_email {
+                margin-top: 14px;
+                padding: 25px 30px;
+                font-size: 14px;
+                font-weight: 400;
+                font-family: var(--mainfont);
+                color: var(--white);
+                border-radius: 15px;
+                border: 1.5px solid var(--green);
+                background-color: var(--background);
+                outline: none;
+
+                input {
+                    width: 100%;
+                    padding: 0;
+                    margin: 0;
+                    font-size: 14px;
+                    font-weight: 400;
+                    font-family: var(--mainfont);
+                    color: var(--white);
+                    outline: none;
+                    border: 0;
+                    background-color: transparent;
+                }
+
+                input::placeholder {
+                    font-size: 14px;
+                    font-weight: 400;
+                    font-family: var(--mainfont);
+                    color: #838383;
+                    background-color: var(--background);
+                    outline: none;
+                }
+            }
+        }
+
+        .divider {
+            width: 100%;
+            padding: 0;
+            margin: 50px 0 0 0;
+            border-bottom: 1.5px solid var(--blue);
+        }
+
+        .finish_btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            margin-top: 10px;
+            padding: 28px 0;
+            border-radius: 15px;
+            border: 1.5px solid var(--green);
+            font-size: 16px;
+            font-weight: 400;
+            color: var(--white);
+            cursor: pointer;
+        }
     }
 }
