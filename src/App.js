@@ -4,6 +4,9 @@ import Home from "./pages/home/Home";
 import Bank from "./pages/bank/Bank";
 import SignIn from "./pages/signin/SignIn";
 import MyPage from "./pages/mypage/MyPage";
+import StudyRecord from "./pages/mypage/sections/StudyRecord";
+import EditInfo from "./pages/mypage/sections/EditInfo";
+import GptHelp from "./pages/mypage/sections/GptHelp";
 import Solve from "./pages/solve/Solve";
 
 function App() {
@@ -14,7 +17,12 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/bank" element={<Bank />} />
         <Route path="/login" element={<SignIn />} />
-        <Route path="/mypage" element={<MyPage />} />
+        <Route path="/mypage" element={<MyPage />}>
+          <Route index element={<Navigate to="study" replace />} />
+          <Route path="study" element={<StudyRecord />} />
+          <Route path="edit" element={<EditInfo />} />
+          <Route path="gpt" element={<GptHelp />} />
+        </Route>
         <Route path="/solve" element={<Solve />} />
       </Route>
     </Routes>
