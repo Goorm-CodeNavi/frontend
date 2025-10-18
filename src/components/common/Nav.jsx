@@ -7,6 +7,7 @@ import Profile from "../../assets/img/img_profile.svg";
 const Nav = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(true);
+  
   const toggleProfile = () => {
     setIsOpen((v) => !v);
   };

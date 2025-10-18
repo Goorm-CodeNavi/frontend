@@ -1,0 +1,215 @@
+.chatbot-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 999;
+
+  .chatbot-icon {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s;
+
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
+
+  .chat-window {
+    position: absolute;
+    bottom: 80px;
+    right: 0;
+    width: 480px;
+    height: 500px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(20px);
+    transition: all 0.4s ease;
+
+    &.open {
+      transform: translateY(0);
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .chat-header {
+      background-color: #007bff;
+      color: white;
+      padding: 10px;
+      text-align: center;
+      font-weight: bold;
+      flex-shrink: 0;
+    }
+
+    .chat-content {
+      display: flex;
+      flex: 1;
+      min-height: 0;
+      overflow: hidden;
+
+      .chat-sidebar {
+        width: 150px;
+        border-right: 1px solid #ddd;
+        display: flex;
+        flex-direction: column;
+
+        .new-chat-btn {
+          background-color: #007bff;
+          color: white;
+          border: none;
+          margin: 8px;
+          padding: 6px;
+          border-radius: 6px;
+          cursor: pointer;
+          font-size: 14px;
+        }
+
+        .session-list {
+          flex: 1;
+          overflow-y: auto;
+
+          .session-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 8px;
+            border-radius: 6px;
+            margin: 4px;
+            cursor: pointer;
+            background: #f8f9fa;
+            transition: background 0.2s;
+
+            &.active {
+              background-color: #e0f0ff;
+            }
+
+            &:hover {
+              background-color: #f1f1f1;
+            }
+
+            .session-title {
+              flex: 1;
+              font-size: 13px;
+              color: #333;
+
+              white-space: nowrap;      // 한 줄로 표시
+              overflow: hidden;         // 넘치는 텍스트 숨김
+              text-overflow: ellipsis;  // ...으로 표시
+            }
+
+            .delete-btn {
+              background: none;
+              border: none;
+              cursor: pointer;
+              font-size: 14px;
+            }
+          }
+        }
+      }
+
+      .chat-main {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+        background-color: #f8f9fa;
+
+        .chat-body {
+          flex: 1;
+          padding: 10px;
+          overflow-y: auto;
+          background-color: #f8f9fa;
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+
+          .chat-message {
+            max-width: 80%;
+            padding: 8px 12px;
+            border-radius: 12px;
+            line-height: 1.4;
+            word-break: break-word;
+
+            &.user {
+              align-self: flex-end;
+              background-color: #007bff;
+              color: white;
+              border-bottom-right-radius: 2px;
+            }
+
+            &.bot {
+              align-self: flex-start;
+              background-color: #e9ecef;
+              color: black;
+              border-bottom-left-radius: 2px;
+            }
+
+            &.loading {
+              display: flex;
+              gap: 4px;
+
+              .dot {
+                width: 6px;
+                height: 6px;
+                background-color: #999;
+                border-radius: 50%;
+                animation: blink 1s infinite ease-in-out;
+
+                &:nth-child(2) {
+                  animation-delay: 0.2s;
+                }
+                &:nth-child(3) {
+                  animation-delay: 0.4s;
+                }
+              }
+            }
+          }
+        }
+
+        .chat-input-area {
+          display: flex;
+          border-top: 1px solid #ddd;
+          flex-shrink: 0;
+
+          input {
+            flex: 1;
+            border: none;
+            padding: 10px;
+            outline: none;
+          }
+
+          button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+
+            &:hover {
+              background-color: #0056b3;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+/* 🔥 점점 깜빡이는 애니메이션 */
+@keyframes blink {
+  0%, 80%, 100% { opacity: 0.3; }
+  40% { opacity: 1; }
+}
