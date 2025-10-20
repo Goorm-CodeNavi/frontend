@@ -13,7 +13,7 @@ const LogIn = () => {
     setError("");
 
     if (!id || !password) {
-      setError("아이디와 비밀번호를 모두 입력해주세요.");
+      setError("아이디와 비밀번호를 모두 입력해 주세요.");
       return;
     }
 
@@ -26,7 +26,7 @@ const LogIn = () => {
   return (
     <div className="Login_wrap">
       <div className="Login-box">
-        <h1 className="Login-title">Login</h1>{" "}
+        <h1 className="Login-title">LOGIN</h1>{" "}
         <form onSubmit={handleSubmit} className="Login-form">
           <div className="input-group">
             <input
@@ -68,7 +68,7 @@ const LogIn = () => {
         </form>
         <div className="login-prompt">
           <span className="prompt-text">아직 회원이 아니신가요?</span>
-          <Link to="/login" className="login-link">
+          <Link to="/signup" className="signup-link">
             회원가입하기
           </Link>
         </div>
