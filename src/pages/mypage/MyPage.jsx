@@ -1,8 +1,5 @@
 import React, { useMemo, useState } from 'react';
 import Profile from '../../assets/img/img_profile.svg';
-import StudyRecord from './sections/StudyRecord';
-import EditInfo from './sections/EditInfo';
-import LinkNotion from './sections/GptHelp';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
 const MyPage = () => {
@@ -35,7 +32,7 @@ const MyPage = () => {
                         내 정보 수정
                     </div>
                     <div
-                        className={`menu_item gpt ${isActive("gpt") ? "active" : ""}`}
+                        className={`menu_item link_notion ${isActive("gpt") ? "active" : ""}`}
                         onClick={() => navigate("/mypage/gpt")}
                     >
                         GPT에게 도움받기
