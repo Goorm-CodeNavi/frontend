@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Hide from '../../../assets/img/ic_hide.svg';
 import Seek from '../../../assets/img/ic_seek.svg';
 
@@ -7,6 +7,13 @@ const EditInfo = () => {
     const old_id = "aster03";
     const old_email = "aster030th@naver.com";
     const notion_email = "aster030th@naver.com";
+
+    // 비밀번호 가시성 상태
+    const [showPw, setShowPw] = useState(false);
+    const [showPwCheck, setShowPwCheck] = useState(false);
+
+    const togglePw = () => setShowPw(prev => !prev);
+    const togglePwCheck = () => setShowPwCheck(prev => !prev);
 
     return (
         <div className='EditInfo_wrap'>
@@ -24,15 +31,15 @@ const EditInfo = () => {
                     <div className="title">비밀번호</div>
                     <div className="new_pw">
                         <div className="pw_input">
-                            <input type="text" placeholder='새로운 비밀번호를 입력해 주세요' />
+                            <input type={showPw ? "text" : "password"} placeholder='새로운 비밀번호를 입력해 주세요' />
                         </div>
-                        <img src={Hide} alt="Hide" />
+                        <img src={showPw ? Seek : Hide} onClick={togglePw} alt="Hide" />
                     </div>
                     <div className="check_new_pw">
                         <div className="pw_input">
-                            <input type="text" placeholder='비밀번호를 다시 입력해 주세요' />
+                            <input type={showPwCheck ? "text" : "password"} placeholder='비밀번호를 다시 입력해 주세요' />
                         </div>
-                        <img src={Hide} alt="Hide" />
+                        <img src={showPwCheck ? Seek : Hide} onClick={togglePwCheck} alt="Hide" />
                     </div>
                     <div className="warning">비밀번호가 일치하지 않습니다.</div>
                 </div>
