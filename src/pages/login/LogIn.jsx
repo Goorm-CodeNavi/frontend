@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
+import Seek from '../../assets/img/ic_seek.svg';
+import Hide from '../../assets/img/ic_hide.svg';
 import { login as loginApi } from "../../api/userApi";
 import { useAuth } from "../../contexts/AuthContext";
 
@@ -48,62 +49,42 @@ const LogIn = () => {
 
   return (
     <div className="Login_wrap">
-      <div className="Login-box">
-        <h1 className="Login-title">LOGIN</h1>
-        <form onSubmit={handleSubmit} className="Login-form">
-          <div className="input-group">
+      <div className="login_container">
+        <h1>LOGIN</h1>
+        <form onSubmit={handleSubmit}>
+          <div className="input_id">
             <input
               type="text"
               placeholder="아이디 입력"
               value={id}
               onChange={(e) => setId(e.target.value)}
-              className="Login-input"
             />
           </div>
-
-          <div
-            className="input-group password-group"
-            style={{ position: "relative" }}
-          >
+          <div className="input_pw">
             <input
               type={passwordVisible ? "text" : "password"}
               placeholder="비밀번호 입력"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="Login-input"
             />
-            <span
-              className="password-toggle"
-              onClick={() => setPasswordVisible((v) => !v)}
-            >
-              {passwordVisible ? <FaEye /> : <FaEyeSlash />}
-            </span>
+            <img 
+              className="pw_visible" 
+              src={passwordVisible ? Seek : Hide} 
+              alt="pw_visible"
+              onClick={() => setPasswordVisible((prev) => !prev)}
+            />
           </div>
-
           {error && <p className="error-message">{error}</p>}
-
-          <button id="Login-button" type="submit" className="Login-button">
-            로그인
-          </button>
+          <button type="submit" className="login_btn">로그인</button>
         </form>
-
-        <div className="login-prompt">
-          <span className="prompt-text">아직 회원이 아니신가요?</span>
-          <Link to="/signup" className="signup-link">
-            회원가입하기
-          </Link>
+        <div className="not_member">
+          <div className="text">아직 회원이 아니신가요?</div>
+          <h4 onClick={() => navigate("/signup")}>회원가입하기</h4>
         </div>
-
-        <hr className="divider" />
-
-        <div className="find-links">
-          <Link to="/findid" className="find-link">
-            아이디 찾기
-          </Link>
-          <span className="link-divider">|</span>
-          <Link to="/passwordreset" className="reset-link">
-            비밀번호 재설정
-          </Link>
+        <div className="divider"></div>
+        <div className="options">
+          <div className="find_id" onClick={() => navigate("/find-id")}>아이디 찾기</div>
+          <div className="reset_pw" onClick={() => navigate("/passwordreset")}>비밀번호 재설정</div>
         </div>
       </div>
     </div>
