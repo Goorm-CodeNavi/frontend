@@ -10,6 +10,8 @@ const CustomAxios = axios.create({
 // 요청 인터셉터
 CustomAxios.interceptors.request.use(
   (config) => {
+    if (config.skipAuth) return config;  // skipAuth가 true면 Authorization을 붙이지 않음
+
     const token = localStorage.getItem("accessToken");
 
     if (token) {
