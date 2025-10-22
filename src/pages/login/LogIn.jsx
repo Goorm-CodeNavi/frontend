@@ -31,9 +31,7 @@ const LogIn = () => {
       const { accessToken, tokenType } = data.result || {};
       if (!accessToken) throw new Error("액세스 토큰이 없습니다.");
 
-      // Context를 통해 상태 + localStorage 동시 관리
-      localStorage.setItem("accessToken", accessToken);
-      localStorage.setItem("tokenType", tokenType || "Bearer");
+      setAuth(accessToken, tokenType || "Bearer");
 
       navigate("/"); // 홈으로 이동
     } catch (err) {
