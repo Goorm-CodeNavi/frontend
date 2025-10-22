@@ -1,203 +1,332 @@
-.signup_wrap {
-  background-color: var(--background);
-  color: var(--white);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  font-family: var(--mainfont);
+.SignUp_wrap {
+    display: flex;
+    margin: 0 auto;
+    align-items: center;
+    justify-content: center;
 
-  .signup-box {
-    width: 420px;
-    padding: 40px;
+    .signup_container {
+        width: 586px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding-top: 70px;
+        padding-bottom: 120px;
 
-    .signup-title {
-      text-align: center;
-      font-size: 24px;
-      font-weight: 700;
-      color: var(--white);
-      letter-spacing: 2px;
-      margin-bottom: 30px;
-    }
-
-    /* ----------- Input 기본 스타일 ----------- */
-    .input-container,
-    .password-container,
-    .email-container {
-      position: relative;
-      display: flex;
-      align-items: center;
-      width: 100%;
-      gap: 10px;
-      margin-bottom: 13px;
-    }
-
-    input {
-      flex: 1;
-      height: 45px;
-      padding: 0 12px;
-      border: 1px solid var(--green);
-      border-radius: 8px;
-      background-color: transparent;
-      color: var(--white);
-      font-size: 14px;
-
-      &::placeholder {
-        color: #777;
-      }
-
-      &:hover {
-        border: 1px solid var(--blue);
-        box-shadow: 0 0 6px var(--blue);
-      }
-    }
-
-    .input-container {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      width: 100%;
-    }
-
-    .id-input {
-      flex: 1;
-      height: 45px;
-      padding: 0 12px;
-      border: 1px solid var(--green);
-      border-radius: 8px;
-      background-color: transparent;
-      color: var(--white);
-      font-size: 14px;
-
-      &::placeholder {
-        color: #777;
-      }
-    }
-
-    .check-button {
-      height: 45px;
-      padding: 0 12px;
-      border: 1px solid var(--green);
-      border-radius: 8px;
-      background: transparent;
-      color: var(--green);
-      cursor: pointer;
-      transition: 0.2s;
-      font-size: 14px;
-
-      &:hover {
-        background: var(--green);
-        color: var(--background);
-      }
-    }
-
-    .submit-button {
-      width: 100%;
-      margin-top: 20px;
-      background-color: transparent;
-      color: var(--green);
-      border: 1px solid var(--green);
-      padding: 14px;
-      border-radius: 8px;
-      font-family: var(--mainfont);
-      font-weight: 600;
-      letter-spacing: 1px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-
-      &:hover {
-        background-color: var(--green);
-        color: var(--background);
-        box-shadow: 0 0 10px var(--green);
-      }
-    }
-
-    /* ----------- 비밀번호 토글 ----------- */
-    .password-toggle {
-      position: absolute;
-      right: 12px;
-      color: var(--white);
-      cursor: pointer;
-      font-size: 16px;
-      transition: color 0.2s ease;
-
-      &:hover {
-        color: var(--blue);
-      }
-    }
-
-    /* ----------- 비밀번호 재입력 ----------- */
-    .confirmpassword-container {
-      position: relative;
-      margin-top: 10px;
-
-      input {
-        width: 100%;
-      }
-    }
-
-    /* ----------- 에러 메시지 ----------- */
-    .error-message {
-      color: var(--red);
-      font-size: 12px;
-      margin-top: 6px;
-    }
-
-    /* ----------- 약관 동의 섹션 ----------- */
-    .agreement-section {
-      margin-top: 25px;
-    }
-
-    .agreement-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 8px 0;
-      cursor: pointer;
-      transition: background 0.2s ease;
-
-      &:hover {
-        background: rgba(0, 255, 65, 0.05);
-      }
-
-      input[type="checkbox"] {
-        accent-color: var(--blue);
-        width: 16px;
-        height: 16px;
-        margin-right: 8px;
-      }
-
-      .agreement-text {
-        color: #bbb;
-        font-size: 13px;
-      }
-
-      .detail-link {
-        color: var(--green);
-        font-size: 18px;
-        font-weight: bold;
-
-        &:hover {
-          color: var(--blue);
+        h1 {
+            text-align: center;
+            font-size: 40px;
+            font-weight: 400;
+            color: var(--white);
         }
-      }
 
-      .divider {
-        border: none;
-        height: 2px;
-        color: var(--blue);
-        margin: 20px 0;
-      }
+        .user_id {
+            margin-top: 61px;
+
+            .title {
+                font-size: 16px;
+                font-weight: 400;
+                color: var(--white);
+            }
+
+            .id_input {
+                display: flex;
+                margin-top: 14px;
+                justify-content: space-between;
+                align-items: center;
+                gap: 24px;
+
+                input {
+                    flex: 1;
+                    padding: 25px 30px;
+                    background-color: var(--background);
+                    margin: 0;
+                    border-radius: 15px;
+                    border: 1.5px solid var(--green);
+                    font-family: var(--mainfont);
+                    font-size: 14px;
+                    font-weight: 400;
+                    color: var(--white);
+                    outline: none;
+                }
+
+                &::placeholder {
+                    color: #838383;
+                }
+
+                .dupl_btn {
+                    display: flex;
+                    width: 134px;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 21.5px 0;
+                    font-size: 14px;
+                    font-weight: 400;
+                    color: var(--white);
+                    border-radius: 15px;
+                    border: 1.5px solid var(--green);
+                    cursor: pointer;
+                }
+            }
+
+            .warning {
+                font-size: 14px;
+                margin-top: 10px;
+                margin-left: 5px;
+                color: var(--red);
+            }
+        }
+
+        .user_pw {
+            margin-top: 38px;
+
+            .title {
+                font-size: 16px;
+                font-weight: 400;
+                color: var(--white);
+            }
+
+            .pw_input {
+                display: flex;
+                align-items: center;
+                padding: 25px 30px;
+                border-radius: 15px;
+                border: 1.5px solid var(--green);
+                background-color: var(--background);
+                gap: 24px;
+                margin-top: 14px;
+                margin-bottom: 3px;
+
+                input {
+                    flex: 1;
+                    font-family: var(--mainfont);
+                    font-size: 14px;
+                    font-weight: 400;
+                    color: var(--white);
+                    background-color: transparent;
+                    outline: none;
+                    border: 0;
+                }
+
+                &::placeholder {
+                    color: #838383;
+                }
+
+                img {
+                    width: 20px;
+                    cursor: pointer;
+                }
+            }
+
+            .warning {
+                margin-top: 7px;
+                margin-left: 5px;
+                font-size: 14px;
+                font-weight: 400;
+                color: var(--red);
+            }
+        }
+
+        .user_email {
+            margin-top: 38px;
+
+            .title {
+                font-size: 16px;
+                font-weight: 400;
+                color: var(--white);
+            }
+
+            .email_input {
+                display: flex;
+                margin-top: 14px;
+
+                input {
+                    flex: 1;
+                    padding: 25px 30px;
+                    background-color: var(--background);
+                    font-family: var(--mainfont);
+                    font-size: 14px;
+                    font-weight: 400;
+                    color: var(--white);
+                    outline: none;
+                    border-radius: 15px;
+                    border: 1.5px solid var(--green);
+                }
+            }
+        }
+
+        .user_agrees {
+            margin-top: 55px;
+
+            .service_agree {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 13.5px 12px;
+
+                .agreeinfo {
+                    display: flex;
+                    gap: 8px;
+
+                    img {
+                        width: 20px;
+                        cursor: pointer;
+                    }
+
+                    .agree_title {
+                        display: flex;
+                        gap: 6px;
+                        font-size: 12px;
+                        font-weight: 400;
+                        color: var(--white);
+
+                        .highlight {
+                            font-size: 12px;
+                            font-weight: 400;
+                            color: var(--red);
+                        }
+                    }
+                }
+
+                .goto_detail {
+                    width: 18px;
+                    height: 18px;
+                    cursor: pointer;
+
+                    img {
+                        width: 100%;
+                    }
+                }
+            }
+
+            .userinfo_agree {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 13.5px 12px;
+
+                .agreeinfo {
+                    display: flex;
+                    gap: 8px;
+
+                    img {
+                        width: 20px;
+                        cursor: pointer;
+                    }
+
+                    .agree_title {
+                        display: flex;
+                        gap: 6px;
+                        font-size: 12px;
+                        font-weight: 400;
+                        color: var(--white);
+
+                        .highlight {
+                            font-size: 12px;
+                            font-weight: 400;
+                            color: var(--red);
+                        }
+                    }
+                }
+
+                .goto_detail {
+                    width: 18px;
+                    height: 18px;
+                    cursor: pointer;
+
+                    img {
+                        width: 100%;
+                    }
+                }
+            }
+
+            .marketing_agree {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 13.5px 12px;
+
+                .agreeinfo {
+                    display: flex;
+                    gap: 8px;
+
+                    img {
+                        width: 20px;
+                        cursor: pointer;
+                    }
+
+                    .agree_title {
+                        display: flex;
+                        gap: 6px;
+                        font-size: 12px;
+                        font-weight: 400;
+                        color: var(--white);
+
+                        .highlight {
+                            font-size: 12px;
+                            font-weight: 400;
+                            color: var(--red);
+                        }
+                    }
+                }
+
+                .marketing_type {
+                    display: flex;
+                    gap: 26px;
+                    align-items: center;
+
+                    .m_email {
+                        display: flex;
+                        gap: 8px;
+                        align-items: center;
+
+                        img {
+                            width: 20px;
+                            cursor: pointer;
+                        }
+
+                        .m_text {
+                            font-size: 12px;
+                            font-weight: 400;
+                            color: var(--wihte);
+                        }
+                    }
+
+                    .m_sms {
+                        display: flex;
+                        gap: 8px;
+                        align-items: center;
+
+                        img {
+                            width: 20px;
+                            cursor: pointer;
+                        }
+
+                        .m_text {
+                            font-size: 12px;
+                            font-weight: 400;
+                            color: var(--wihte);
+                        }
+                    }
+                }
+            }
+        }
+
+        .divider {
+            margin-top: 30px;
+            padding: 0;
+            border-bottom: 1.5px solid var(--blue);
+        }
+
+        .signup_btn {
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 28px 0;
+            border-radius: 15px;
+            border: 1.5px solid var(--green);
+            font-size: 16px;
+            font-weight: 400;
+        }
     }
-    .submit-button {
-      flex: 1;
-      height: 45px;
-      padding: 0 12px;
-      border: 1px solid var(--green);
-      border-radius: 8px;
-      background-color: transparent;
-      color: var(--white);
-      font-size: 14px;
-    }
-  }
 }
