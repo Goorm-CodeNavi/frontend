@@ -151,6 +151,10 @@
                     border-radius: 15px;
                     border: 1.5px solid var(--green);
                 }
+
+                &::placeholder {
+                    color: #838383;
+                }
             }
         }
 
@@ -327,6 +331,7 @@
             border: 1.5px solid var(--green);
             font-size: 16px;
             font-weight: 400;
+            cursor: pointer;
         }
     }
 }
