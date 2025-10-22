@@ -3,10 +3,11 @@ import { NavLink, Link } from "react-router-dom";
 import ProfileDropdown from "./ProfileDropdown";
 import Logo from "../../assets/img/ic_logo.svg";
 import Profile from "../../assets/img/img_profile.svg";
+import { useAuth } from "../../contexts/AuthContext";
 
 const Nav = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const { isLoggedIn } = useAuth();
   
   const toggleProfile = () => {
     setIsOpen((v) => !v);
