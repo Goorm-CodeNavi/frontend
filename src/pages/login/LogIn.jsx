@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { login } from "../../api/userApi";
-import axios from "axios";
+import { login as loginApi } from "../../api/userApi";
+import { useAuth } from "../../contexts/AuthContext";
 
 const LogIn = () => {
   const [id, setId] = useState("");
@@ -10,6 +10,7 @@ const LogIn = () => {
   const [error, setError] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
   const navigate = useNavigate();
+  const { login: setAuth } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -21,20 +22,29 @@ const LogIn = () => {
     }
 
     try {
-      const response = await login({
-        username: id,
-        password: password,
-      });
+      const data = await loginApi({ username: id, password });
 
-      console.log("로그인 성공:", response.data);
+      if (!data?.isSuccess) {
+        throw new Error(data?.message || "로그인 실패");
+      }
 
-      localStorage.setItem("accessToken", response.data.accessToken);
+      const { accessToken, tokenType } = data.result || {};
+      if (!accessToken) throw new Error("액세스 토큰이 없습니다.");
 
-      alert("로그인 성공!");
-      navigate("/"); // 로그인 후 홈으로 이동
+      // Context를 통해 상태 + localStorage 동시 관리
+      localStorage.setItem("accessToken", accessToken);
+      localStorage.setItem("tokenType", tokenType || "Bearer");
+
+      navigate("/"); // 홈으로 이동
     } catch (err) {
       console.error("로그인 실패:", err);
-      setError("아이디 또는 비밀번호가 올바르지 않습니다.");
+
+      // 에러 처리
+      setError(
+        err?.response?.data?.result ||
+        err?.response?.data?.message ||
+        "아이디 또는 비밀번호를 확인해주세요."
+      );
     }
   };
 
