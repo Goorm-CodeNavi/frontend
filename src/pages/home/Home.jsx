@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import MainLogo from '../../assets/img/ic_mainlogo.svg';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
 
 const Home = () => {
-    const [isLoggedIn, setIsLoggedIn] = useState(true);
     const navigate = useNavigate();
+  const { isLoggedIn } = useAuth();
 
     // 더미데이터
     const userName = "aster03";

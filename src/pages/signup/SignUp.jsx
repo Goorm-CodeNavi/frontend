@@ -71,22 +71,18 @@ const SignUp = () => {
   return (
     <div className="signup_wrap">
       <div className="signup-box">
-        {" "}
-        {/* <--- signup-box 추가 */}
-        <h1 className="signup-title">회원가입</h1>
+        <h1 className="signup-title">SIGN UP</h1>
         <form onSubmit={handleSubmit}>
           {/* 1. 아이디 입력 */}
-          <div className="input-group">
-            <label className="input-label" htmlFor="id">
-              아이디
-            </label>
+          <div className="input-group-id">
+            <label className="input-label-id">아이디</label>
             <div className="input-container">
               <input
                 type="text"
                 id="id"
                 name="id"
-                className="signup-input"
-                placeholder="아이디를 입력해 주세요."
+                className="id-input"
+                placeholder="아이디 입력"
                 value={formData.id}
                 onChange={handleChange}
               />
@@ -98,27 +94,22 @@ const SignUp = () => {
                 중복 확인
               </button>
             </div>
+
             {error.id && <p className="error-message">{error.id}</p>}
             {/* 임시 메시지: ID 사용 불가 메시지 */}
             {/* {error.id === "이미 사용 중인 아이디입니다." && <p className="error-message">이미 사용 중인 아이디입니다.</p>} */}
           </div>
 
           {/* 2. 비밀번호 입력 */}
-          <div className="input-group">
-            {" "}
-            {/* <--- style={{ position: "relative" }} 제거, input-container에 적용 */}
-            <label className="input-label" htmlFor="password">
-              비밀번호
-            </label>
-            <div className="input-container">
-              {" "}
-              {/* <--- input-container 추가 */}
+          <div className="input-group-password">
+            <label className="input-label-password">비밀번호</label>
+            <div className="password-container">
               <input
                 type={passwordVisible ? "text" : "password"}
                 id="password"
                 name="password"
-                className="signup-input"
-                placeholder="비밀번호를 입력해 주세요. (8~30자)" // <--- 플레이스홀더 텍스트 수정
+                className="password-input"
+                placeholder="비밀번호 입력 (8~30자)"
                 value={formData.password}
                 onChange={handleChange}
               />
@@ -129,54 +120,40 @@ const SignUp = () => {
                 {passwordVisible ? <FaEye /> : <FaEyeSlash />}
               </span>
             </div>
-            {error.password && (
-              <p className="error-message">{error.password}</p>
-            )}
-          </div>
-
-          {/* 3. 비밀번호 확인 */}
-          <div className="input-group">
-            {" "}
-            {/* <--- style={{ position: "relative" }} 제거, input-container에 적용 */}
-            {/* 비밀번호 확인 라벨이 없으므로 추가하지 않음 (디자인에 따라 다름) */}
-            <div className="input-container">
-              {" "}
-              {/* <--- input-container 추가 */}
+            <div className="password-container">
               <input
-                type={confirmVisible ? "text" : "password"}
-                id="confirmPassword"
-                name="confirmPassword"
-                className="signup-input"
-                placeholder="비밀번호를 다시 입력해 주세요." // <--- 플레이스홀더 텍스트 수정
-                value={formData.confirmPassword}
+                type={passwordVisible ? "text" : "password"}
+                id="confirmpassword"
+                name="confirmpassword"
+                className="confirmpassword-input"
+                placeholder="비밀번호 재입력"
+                value={formData.password}
                 onChange={handleChange}
               />
               <span
                 className="password-toggle"
-                onClick={() => setConfirmVisible(!confirmVisible)}
+                onClick={() => setPasswordVisible(!passwordVisible)}
               >
-                {confirmVisible ? <FaEye /> : <FaEyeSlash />}
+                {passwordVisible ? <FaEye /> : <FaEyeSlash />}
               </span>
             </div>
-            {error.confirmPassword && (
-              <p className="error-message">{error.confirmPassword}</p>
-            )}
           </div>
 
+          {error.password && <p className="error-message">{error.password}</p>}
+          {error.confirmPassword && (
+            <p className="error-message">{error.confirmPassword}</p>
+          )}
+
           {/* 4. 이메일 입력 */}
-          <div className="input-group">
-            <label className="input-label" htmlFor="email">
-              이메일
-            </label>
-            <div className="input-container">
-              {" "}
-              {/* <--- input-container 추가 */}
+          <div className="input-group-email">
+            <label className="input-label-email">이메일</label>
+            <div className="email-container">
               <input
-                type="email" // <--- type="tel" 에서 type="email"로 변경
+                type="email"
                 id="email"
                 name="email"
-                className="signup-input"
-                placeholder="이메일을 입력해 주세요."
+                className="email-input"
+                placeholder="이메일 입력"
                 value={formData.email}
                 onChange={handleChange}
               />
@@ -253,15 +230,14 @@ const SignUp = () => {
             </div>
           </div>
 
+          <hr className="divider" />
+
           {/* 6. 가입하기 버튼 */}
           <button type="submit" className="submit-button">
-            {" "}
-            {/* <--- class name 수정 */}
             가입하기
           </button>
         </form>
-      </div>{" "}
-      {/* <--- signup-box 닫기 */}
+      </div>
     </div>
   );
 };

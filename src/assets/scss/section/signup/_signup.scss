@@ -1,95 +1,203 @@
 .signup_wrap {
+  background-color: var(--background);
+  color: var(--white);
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
-  background-color: var(--background);
-
-  // style
+  height: 100vh;
   font-family: var(--mainfont);
-  font-size: 14px;
-  line-height: 1.6;
-  font-weight: 400;
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-text-size-adjust: 100%;
-}
+  .signup-box {
+    width: 420px;
+    padding: 40px;
 
-.signup-title {
-  font-size: 2.2rem;
-  color: var(--white);
-  text-align: center;
-  font-weight: 600;
-}
-// 입력 그룹
-.input-group {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
+    .signup-title {
+      text-align: center;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: 2px;
+      margin-bottom: 30px;
+    }
 
-  .input-label {
-    font-size: 1rem;
-    color: var(--white);
-  }
+    /* ----------- Input 기본 스타일 ----------- */
+    .input-container,
+    .password-container,
+    .email-container {
+      position: relative;
+      display: flex;
+      align-items: center;
+      width: 100%;
+      gap: 10px;
+      margin-bottom: 13px;
+    }
 
-  .input-container {
-    display: flex;
-    gap: 8px;
-    color: var(--green);
-
-    .signup-input {
+    input {
       flex: 1;
-      padding: 12px 16px;
-      border-radius: 8px;
+      height: 45px;
+      padding: 0 12px;
       border: 1px solid var(--green);
+      border-radius: 8px;
       background-color: transparent;
-      color: var(--background);
-      font-size: 0.8rem;
+      color: var(--white);
+      font-size: 14px;
 
       &::placeholder {
-        color: var(--text-placeholder, #777);
+        color: #777;
+      }
+
+      &:hover {
+        border: 1px solid var(--blue);
+        box-shadow: 0 0 6px var(--blue);
+      }
+    }
+
+    .input-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+    }
+
+    .id-input {
+      flex: 1;
+      height: 45px;
+      padding: 0 12px;
+      border: 1px solid var(--green);
+      border-radius: 8px;
+      background-color: transparent;
+      color: var(--white);
+      font-size: 14px;
+
+      &::placeholder {
+        color: #777;
       }
     }
 
     .check-button {
-      padding: 10px 14px;
-      background-color: var(--primary);
-      color: var(--white);
+      height: 45px;
+      padding: 0 12px;
       border: 1px solid var(--green);
       border-radius: 8px;
+      background: transparent;
+      color: var(--green);
       cursor: pointer;
-      font-weight: 500;
       transition: 0.2s;
+      font-size: 14px;
 
       &:hover {
-        opacity: 0.9;
+        background: var(--green);
+        color: var(--background);
       }
     }
-  }
 
-  .error-message {
-    font-size: 0.8rem;
-    color: var(--red);
-  }
-}
+    .submit-button {
+      width: 100%;
+      margin-top: 20px;
+      background-color: transparent;
+      color: var(--green);
+      border: 1px solid var(--green);
+      padding: 14px;
+      border-radius: 8px;
+      font-family: var(--mainfont);
+      font-weight: 600;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: all 0.2s ease;
 
-// 제출 버튼
-.submit-button {
-  width: 100%;
-  padding: 12px;
-  font-size: 1rem;
-  color: var(--white);
-  border-radius: 8px;
-  border: 1px solid var(--green);
-  background-color: transparent;
+      &:hover {
+        background-color: var(--green);
+        color: var(--background);
+        box-shadow: 0 0 10px var(--green);
+      }
+    }
 
-  cursor: pointer;
-  transition: 0.2s;
+    /* ----------- 비밀번호 토글 ----------- */
+    .password-toggle {
+      position: absolute;
+      right: 12px;
+      color: var(--white);
+      cursor: pointer;
+      font-size: 16px;
+      transition: color 0.2s ease;
 
-  &:hover {
-    opacity: 0.9;
+      &:hover {
+        color: var(--blue);
+      }
+    }
+
+    /* ----------- 비밀번호 재입력 ----------- */
+    .confirmpassword-container {
+      position: relative;
+      margin-top: 10px;
+
+      input {
+        width: 100%;
+      }
+    }
+
+    /* ----------- 에러 메시지 ----------- */
+    .error-message {
+      color: var(--red);
+      font-size: 12px;
+      margin-top: 6px;
+    }
+
+    /* ----------- 약관 동의 섹션 ----------- */
+    .agreement-section {
+      margin-top: 25px;
+    }
+
+    .agreement-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      cursor: pointer;
+      transition: background 0.2s ease;
+
+      &:hover {
+        background: rgba(0, 255, 65, 0.05);
+      }
+
+      input[type="checkbox"] {
+        accent-color: var(--blue);
+        width: 16px;
+        height: 16px;
+        margin-right: 8px;
+      }
+
+      .agreement-text {
+        color: #bbb;
+        font-size: 13px;
+      }
+
+      .detail-link {
+        color: var(--green);
+        font-size: 18px;
+        font-weight: bold;
+
+        &:hover {
+          color: var(--blue);
+        }
+      }
+
+      .divider {
+        border: none;
+        height: 2px;
+        color: var(--blue);
+        margin: 20px 0;
+      }
+    }
+    .submit-button {
+      flex: 1;
+      height: 45px;
+      padding: 0 12px;
+      border: 1px solid var(--green);
+      border-radius: 8px;
+      background-color: transparent;
+      color: var(--white);
+      font-size: 14px;
+    }
   }
 }
