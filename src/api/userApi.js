@@ -31,13 +31,13 @@ export const getUserinfo = async () => {
 // 아이디 중복 확인
 // (수정) username 파라미터에 기본값('')을 할당하여, undefined로 호출될 때 파라미터가 누락되는 것을 방지
 export const checkId = async (username = '') => { // 파라미터 이름을 id에서 username으로 변경 (혹은 SignUp.js와 맞춤)
-  const { data, status } = await CustomAxios.get("/api/auth/check-id", {
-    params: { username }, // 백엔드 API의 @RequestParam("username")과 일치
-    skipAuth: true,
-    validateStatus: (s) => [200, 400, 409].includes(s),
-  });
+  const { data, status } = await CustomAxios.get("/api/auth/check-id", {
+    params: { username }, // 백엔드 API의 @RequestParam("username")과 일치
+    skipAuth: true,
+    validateStatus: (s) => [200, 400, 409].includes(s),
+  });
 
-  return { status, data };
+  return { status, data };
 };
 
 // 내 제출 기록 조회
@@ -65,7 +65,7 @@ export const signUp = async ({ username, password, email }) => {
     const response = await CustomAxios.post(
       "/api/auth/signup",
       { username, password, email },
-      { 
+      {
         skipAuth: true,
         // 201, 400, 409를 "성공"으로 간주하여 try-catch에서 처리
         validateStatus: (s) => (s >= 200 && s < 300) || s === 400 || s === 409,
@@ -80,9 +80,35 @@ export const signUp = async ({ username, password, email }) => {
       return { status: error.response.status, data: error.response.data };
     }
     // 네트워크 오류 등 알 수 없는 오류
-    return { 
-      status: 500, 
-      data: { message: "알 수 없는 오류가 발생했습니다." } 
+    return {
+      status: 500,
+      data: { message: "알 수 없는 오류가 발생했습니다." }
     };
   }
 };
+
+// 아이디 찾기 - 인증코드 발송
+export const sendVerificationCodeForId = async (email) => {
+  const { data, status } = await CustomAxios.post(
+    "/api/auth/find-id/send-code",
+    { email },
+    { skipAuth: true }
+  );
+  return { data, status };
+};
+
+// 아이디 찾기 - 코드 인증 및 아이디 확인
+export const verifyCodeAndFindId = async (email, code) => {
+  const { data, status } = await CustomAxios.post(
+    "/api/auth/find-id/verify-code",
+    { email, code },
+    {
+      skipAuth: true,
+      // 400 (인증 실패) 에러를 catch에서 처리하기 위해 validateStatus 제거
+      // (또는 400을 포함하도록 validateStatus를 설정할 수도 있습니다)
+    }
+  );
+  // 누락된 반환 구문 추가
+  return { data, status };
+};
+
