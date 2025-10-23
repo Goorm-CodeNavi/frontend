@@ -9,29 +9,12 @@ const CustomAxios = axios.create({
 });
 
 // 요청 인터셉터
-<<<<<<< HEAD:src/api/axios.js
-CustomAxios.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem("accessToken");
-    //const token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNzYxMDQ2NjkyLCJleHAiOjE3NjEwNTAyOTJ9.36LKcaonBy6mWroFQNh2crUI50xnNYcVY6_1VsoIjqmAbF8oaK0JSjSG3Mrc_yBMvFDwzRlcLJgjhk3yn8j8QQ";
-
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
-=======
 CustomAxios.interceptors.request.use((config) => {
   const token = localStorage.getItem("accessToken");
   const tokenType = localStorage.getItem("tokenType") || "Bearer";
   if (token) config.headers.Authorization = `${tokenType} ${token}`;
   return config;
 });
->>>>>>> 5e3b1d5d7107c699a9cc753cd37516524b68a773:src/api/axiosInstance.js
 
 // 응답 인터셉터
 CustomAxios.interceptors.response.use(
