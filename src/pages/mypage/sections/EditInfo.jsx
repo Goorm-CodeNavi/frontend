@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Hide from '../../../assets/img/ic_hide.svg';
 import Seek from '../../../assets/img/ic_seek.svg';
 
@@ -8,6 +8,23 @@ const EditInfo = () => {
     const old_email = "aster030th@naver.com";
     const notion_email = "aster030th@naver.com";
 
+    // 비밀번호 가시성 상태
+    const [showPw, setShowPw] = useState(false);
+    const [showPwCheck, setShowPwCheck] = useState(false);
+
+    // 입력값 상태
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+
+    // 비밀번호 일치 여부
+    const isMismatch = confirmPassword.length > 0 && password !== confirmPassword;
+
+    const togglePw = () => setShowPw(prev => !prev);
+    const togglePwCheck = () => setShowPwCheck(prev => !prev);
+
+//     const [id, setId] = useState('old@email.com')
+// <input value={id} onChange={(e) => setIc(e.target.value)} />
+
     return (
         <div className='EditInfo_wrap'>
             <div className="main_header">내 정보 수정</div>
@@ -15,7 +32,7 @@ const EditInfo = () => {
                 <div className="edit_id">
                     <div className="title">아이디</div>
                     <div className="id">
-                        <input type="text" placeholder={old_id} className='id_input' />
+                        <input type="text" value={old_id} className='id_input' />
                         <div className="dupl_btn">중복 확인</div>
                     </div>
                     <div className="warning">이미 사용 중인 아이디입니다.</div>
@@ -24,17 +41,20 @@ const EditInfo = () => {
                     <div className="title">비밀번호</div>
                     <div className="new_pw">
                         <div className="pw_input">
-                            <input type="text" placeholder='새로운 비밀번호를 입력해 주세요' />
+                            <input type={showPw ? "text" : "password"} placeholder='새로운 비밀번호를 입력해 주세요' />
                         </div>
-                        <img src={Hide} alt="Hide" />
+                        <img src={showPw ? Seek : Hide} onClick={togglePw} alt="Hide" />
                     </div>
                     <div className="check_new_pw">
                         <div className="pw_input">
-                            <input type="text" placeholder='비밀번호를 다시 입력해 주세요' />
+                            <input type={showPwCheck ? "text" : "password"} placeholder='비밀번호를 다시 입력해 주세요' />
                         </div>
-                        <img src={Hide} alt="Hide" />
+                        <img src={showPwCheck ? Seek : Hide} onClick={togglePwCheck} alt="Hide" />
                     </div>
-                    <div className="warning">비밀번호가 일치하지 않습니다.</div>
+                    {/* 비밀번호 불일치 시만 표시 */}
+                    {isMismatch && (
+                        <div className="warning">비밀번호가 일치하지 않습니다.</div>
+                    )}
                 </div>
                 <div className="edit_email">
                     <div className="title">이메일</div>

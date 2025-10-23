@@ -1,142 +1,147 @@
 .Login_wrap {
-  background-color: var(--background);
-  color: var(--white);
-
   display: flex;
+  margin: 0 auto;
   justify-content: center;
-  align-items: center;
-  min-height: calc(100vh - 60px);
-  padding: 20px;
 
-  .Login-box {
-    width: 100%;
-    max-width: 400px;
-    text-align: center;
-    padding: 40px 0;
-
-    .login-title {
-      font-size: 20px;
-      margin-bottom: 40px;
-      font-weight: 500;
-      letter-spacing: 0.1em;
-    }
-
-    .Login-form {
-      .input-group {
-        margin-bottom: 20px;
-        position: relative;
-
-        .Login-input {
-          width: 100%;
-          padding: 20px 25px;
-          background-color: transparent;
-          border: 1.5px solid var(--green);
-          color: var(--white);
-          font-family: var(--mainfont);
-          font-size: 1.2rem;
-          outline: none;
-          box-sizing: border-box;
-          border-radius: 9px;
-
-          &::placeholder {
-            color: #aaa;
-          }
-
-          &:focus {
-            border-color: var(--blue);
-            box-shadow: 0 0 8px rgba(var(--primary-rgb), 0.6);
-          }
-        }
-
-        .password-group {
-          position: absolute;
-          right: 15px;
-          top: 50%;
-          transform: translateY(-50%);
-          cursor: pointer;
-          color: var(--primary);
-          font-size: 1.1rem;
-        }
-        .Login-button {
-          width: 100%;
-          padding: 20px 25px;
-          background-color: transparent;
-          border: 1.5px solid var(--green);
-          color: var(--white);
-          font-family: var(--mainfont);
-          font-size: 0.8rem;
-          outline: none;
-          box-sizing: border-box;
-          border-radius: 9px;
-
-          &:hover {
-            background-color: var(--accent);
-            box-shadow: 0 0 10px rgba(var(--primary-rgb), 0.7);
-          }
-        }
-      }
-    }
-
-    .login-prompt {
-      margin-bottom: 30px;
-    }
-
-    .prompt-text {
+  .login_container {
+    margin-top: 205px;
+    
+    h1 {
+      width: 100%;
+      text-align: center;
+      font-size: 40px;
+      font-weight: 400;
       color: var(--white);
-      margin-right: 10px;
-      font-size: 0.95rem;
     }
 
-    .divider {
-      border: none;
-      height: 2px;
-      background-color: var(--blue);
-      margin: 20px 0;
+    .input_id {
+      width: 100%;
+      margin-top: 90px;
+
+      input {
+        width: 585px;
+        background-color: var(--background);
+        font-family: var(--mainfont);
+        font-size: 14px;
+        color: var(--white);
+        padding: 28px 30px;
+        border-radius: 15px;
+        border: 1.5px solid var(--green);
+        outline: none;
+      }
+
+      &::placeholder {
+        color: #838383;
+        background-color: var(--background);
+        outline: none;
+      }
     }
 
-    .find-link {
-      background: none;
-      border: none;
-      color: var(--primary);
+    .input_pw {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 10px;
+      padding: 28px 30px;
+      border-radius: 15px;
+      border: 1.5px solid var(--green);
+      gap: 24px;
+
+      input {
+        flex: 1;
+        background-color: var(--background);
+        font-family: var(--mainfont);
+        font-size: 14px;
+        color: var(--white);
+        border: 0;
+        outline: none;
+      }
+
+      &::placeholder {
+        color: #838383;
+        background-color: var(--background);
+        outline: none;
+      }
+
+      .pw_visible {
+        width: 20px;
+        cursor: pointer;
+      }
+    }
+
+    .error-message {
+      margin-left: 5px;
+      margin-top: 10px;
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--red);
+    }
+
+    .login_btn {
+      width: 100%;
+      padding: 28px 0;
+      margin-top: 25px;
+      background-color: var(--background);
+      border-radius: 15px;
+      border: 1.5px solid var(--green);
+      color: var(--white);
+      font-family: var(--mainfont);
+      font-size: 16px;
+      font-weight: 400;
       cursor: pointer;
-      text-decoration: none;
-      font-size: 0.95rem;
-      padding: 0;
-      margin: 0;
+    }
 
-      &:hover {
-        text-decoration: underline;
-        color: var(--blue);
+    .not_member {
+      display: flex;
+      width: 100%;
+      justify-content: end;
+      align-items: flex-end;
+      margin-top: 20px;
+      gap: 20px;
+
+      .text {
+        font-size: 14px;
+        font-weight: 400;
+        color: var(--white);
+      }
+
+      h4 {
+        padding: 0;
+        margin: 0;
+        font-size: 16px;
+        font-weight: 400;
+        color: var(--white);
+        font-style: bold;
+        cursor: pointer;
       }
     }
 
     .divider {
-      border: none;
-      border-top: 1px solid var(--border-dark);
-      margin: 30px 0;
+      width: 100%;
+      padding: 0;
+      margin-top: 30px;
+      border-bottom: 1.5px solid var(--blue);
     }
 
-    .find-links {
+    .options {
       display: flex;
-      justify-content: center;
-      gap: 15px;
+      justify-content: space-between;
+      margin-top: 30px;
+      padding: 0 86px 300px 101px;
 
-      .link-divider {
-        color: var(--text-tertiary);
+      .find_id {
+        font-size: 14px;
+        font-weight: 400;
+        color: var(--white);
+        cursor: pointer;
+      }
+
+      .reset_pw {
+        font-size: 14px;
+        font-weight: 400;
+        color: var(--white);
+        cursor: pointer;
       }
     }
   }
-}
-
-button#Login-button {
-  width: 100%;
-  padding: 20px 25px;
-  background-color: transparent;
-  border: 1.5px solid var(--green);
-  color: var(--white);
-  font-family: var(--mainfont);
-  font-size: 1.2rem;
-  outline: none;
-  box-sizing: border-box;
-  border-radius: 9px;
 }

@@ -37,7 +37,7 @@ const PasswordReset = () => {
   // 1. 인증번호 전송 핸들러
   const handleSendCode = () => {
     if (!id || !email) {
-      setError("아이디와 이메일을 모두 입력해주세요.");
+      setError("아이디와 이메일을 모두 입력해 주세요.");
       return;
     }
 
@@ -180,7 +180,7 @@ const PasswordReset = () => {
           <div className="input-group">
             <input
               type="text"
-              placeholder="아이디를 입력해 주세요"
+              placeholder="아이디 입력"
               value={id}
               onChange={(e) => setId(e.target.value)}
               className="id-input"
@@ -191,7 +191,7 @@ const PasswordReset = () => {
           <div className="input-group">
             <input
               type="email"
-              placeholder="이메일을 입력해 주세요"
+              placeholder="이메일 입력"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="email-input"
@@ -200,6 +200,8 @@ const PasswordReset = () => {
           </div>
 
           {error && <p className="error-message">{error}</p>}
+
+          <hr className="divider" />
 
           <button
             id="passwordreset-button"
