@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Hide from '../../../assets/img/ic_hide.svg';
 import Seek from '../../../assets/img/ic_seek.svg';
+import { useUser } from '../../../contexts/UserContext';
 
 const EditInfo = () => {
-    // 더미데이터
-    const old_id = "aster03";
-    const old_email = "aster030th@naver.com";
-    const notion_email = "aster030th@naver.com";
+    const { user } = useUser();
+
+    const [username, setUsername] = useState(user?.username || "");
+    const [email, setEmail] = useState(user?.email || "");
+    const [notionEmail, setNotionEmail] = useState(user?.email || "");
 
     // 비밀번호 가시성 상태
     const [showPw, setShowPw] = useState(false);
@@ -16,14 +18,17 @@ const EditInfo = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
 
+    useEffect(() => {
+        setUsername(user?.username || "");
+        setEmail(user?.email || "");
+        setNotionEmail(user?.email || "");
+    }, [user]);
+
     // 비밀번호 일치 여부
     const isMismatch = confirmPassword.length > 0 && password !== confirmPassword;
 
-    const togglePw = () => setShowPw(prev => !prev);
-    const togglePwCheck = () => setShowPwCheck(prev => !prev);
-
-//     const [id, setId] = useState('old@email.com')
-// <input value={id} onChange={(e) => setIc(e.target.value)} />
+    //     const [id, setId] = useState('old@email.com')
+    // <input value={id} onChange={(e) => setIc(e.target.value)} />
 
     return (
         <div className='EditInfo_wrap'>
@@ -32,7 +37,7 @@ const EditInfo = () => {
                 <div className="edit_id">
                     <div className="title">아이디</div>
                     <div className="id">
-                        <input type="text" value={old_id} className='id_input' />
+                        <input type="text" className='id_input' value={username} onChange={(e) => setUsername(e.target.value)} />
                         <div className="dupl_btn">중복 확인</div>
                     </div>
                     <div className="warning">이미 사용 중인 아이디입니다.</div>
@@ -41,15 +46,24 @@ const EditInfo = () => {
                     <div className="title">비밀번호</div>
                     <div className="new_pw">
                         <div className="pw_input">
-                            <input type={showPw ? "text" : "password"} placeholder='새로운 비밀번호를 입력해 주세요' />
+                            <input
+                                type={showPw ? "text" : "password"}
+                                placeholder='새로운 비밀번호를 입력해 주세요'
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                            />
                         </div>
-                        <img src={showPw ? Seek : Hide} onClick={togglePw} alt="Hide" />
+                        <img src={showPw ? Seek : Hide} onClick={() => setShowPw(v => !v)} alt="Hide" />
                     </div>
                     <div className="check_new_pw">
                         <div className="pw_input">
-                            <input type={showPwCheck ? "text" : "password"} placeholder='비밀번호를 다시 입력해 주세요' />
+                            <input
+                                type={showPwCheck ? "text" : "password"}
+                                placeholder='비밀번호를 다시 입력해 주세요'
+                                value={confirmPassword}
+                                onChange={(e) => setConfirmPassword(e.target.value)} />
                         </div>
-                        <img src={showPwCheck ? Seek : Hide} onClick={togglePwCheck} alt="Hide" />
+                        <img src={showPwCheck ? Seek : Hide} onClick={() => setShowPwCheck(v => !v)} alt="Hide" />
                     </div>
                     {/* 비밀번호 불일치 시만 표시 */}
                     {isMismatch && (
@@ -59,7 +73,7 @@ const EditInfo = () => {
                 <div className="edit_email">
                     <div className="title">이메일</div>
                     <div className="email_input">
-                        <input type="text" placeholder={old_email} />
+                        <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} />
                     </div>
                 </div>
                 <div className="marketing">
@@ -78,7 +92,7 @@ const EditInfo = () => {
                 <div className="link_notion">
                     <div className="title">노션 연동하기</div>
                     <div className="link_email">
-                        <input type="text" placeholder={notion_email} />
+                        <input type="text" value={notionEmail} onChange={(e) => setNotionEmail(e.target.value)} />
                     </div>
                 </div>
                 <div className="divider"></div>
