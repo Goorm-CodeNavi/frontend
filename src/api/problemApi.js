@@ -52,7 +52,7 @@ export const runJudgeCode = async (problemNumber, language, code) => {
 // AI 해설 보기
 export const fetchEditorial = async (problemNumber) => {
   try {
-    const response = await CustomAxios.get(`/api/problem/${problemNumber}/editorial`);
+    const response = await CustomAxios.get(`/api/problems/${problemNumber}/editorial`);
     return response.data;
   } catch (error) {
     console.error("AI 해설보기 API 호출 실패:", error);
