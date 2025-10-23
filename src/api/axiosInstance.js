@@ -1,16 +1,17 @@
 import axios from "axios";
 
-const CustomAxios = axios.create({
-  baseURL: import.meta.env.VITE_BASE_URL,
+const axiosInstance = axios.create({
+  baseURL: process.env.REACT_APP_BASE_URL,
   headers: {
     "Content-Type": "application/json",
   },
 });
 
 // 요청 인터셉터
-CustomAxios.interceptors.request.use(
+axiosInstance.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("accessToken");
+    //const token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNzYxMDQ2NjkyLCJleHAiOjE3NjEwNTAyOTJ9.36LKcaonBy6mWroFQNh2crUI50xnNYcVY6_1VsoIjqmAbF8oaK0JSjSG3Mrc_yBMvFDwzRlcLJgjhk3yn8j8QQ";
 
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
@@ -23,7 +24,7 @@ CustomAxios.interceptors.request.use(
 );
 
 // 응답 인터셉터
-CustomAxios.interceptors.response.use(
+axiosInstance.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
@@ -61,4 +62,4 @@ CustomAxios.interceptors.response.use(
   }
 );
 
-export default CustomAxios;
+export default axiosInstance;
