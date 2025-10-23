@@ -28,14 +28,19 @@ CustomAxios.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
+    const status = error?.response?.status;
+    const code = error?.response?.data?.code;
 
     // auth 경로는 리프레시 시도 X (루프 방지)
     if (isAuthPath(originalRequest?.url)) {
       return Promise.reject(error);
     }
 
-    // 액세스 토큰 만료 (401)
-    if (error.response && error.response.status === 401 && !originalRequest._retry) {
+    // 액세스 토큰 만료로 간주: 401 (일반) 또는 404 + USER4004(명세)
+    const isAuthExpired =
+      (status === 401) || (status === 404 && code === "USER4004");
+
+    if (isAuthExpired && !originalRequest._retry) {
       originalRequest._retry = true;
 
       try {
