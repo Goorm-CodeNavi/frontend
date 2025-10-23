@@ -1,12 +1,129 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Editor from '@monaco-editor/react';
 import ChatBot from '../../components/chatbot/Chatbot';
+import SolveRunModal from './SolveRunModeal';
+import SolveSubmitModal from './SolveSubmitModal';
+import { problemDetails } from '../../api/problemApi';
+import { createSolutions } from '../../api/problemApi';
+import { runJudgeCode } from '../../api/problemApi';
+import { updateSolution } from '../../api/solutionAPI';
+import { submitSolution } from '../../api/solutionAPI';
+
+const templates = {
+    javascript: `console.log("Hello, JavaScript!");`,
+    python: `print("Hello, Python!")`,
+    java: `public class Main {
+        public static void main(String[] args) {
+            System.out.println("Hello, Java!");
+        }
+}`,
+    cpp: `#include <iostream>
+using namespace std;
+
+int main() {
+    cout << "Hello, C++!" << endl;
+    return 0;
+}`,
+    c: `#include <stdio.h>
+
+int main() {
+    printf("Hello, C!\\n");
+    return 0;
+}`,
+};
+
+// 언어별 Judge0 id
+const languageIds = {
+javascript: 63,
+python: 71,
+java: 62,
+cpp: 54,
+c: 50,
+};
 
 const Solve = () => {
     const [time, setTime] = useState(0);
     const [timerId, setTimerId] = useState(null);
     const navigate = useNavigate();
+
+    const { problemNumber } = useParams();
+    const [problem, setProblem] = useState(null);
+    const [loading, setLoading] = useState(null);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        const fetchProblem = async () => {
+            try {
+                setLoading(true);
+                const result = await problemDetails(problemNumber);
+                // result 구조 확인 후 필요한 데이터 추출
+                // 예: result.result.content 또는 result.result
+                console.log("1", result)
+                console.log("문제 번호", problemNumber);
+                setProblem(result.result); 
+            } catch (err) {
+                setError(err);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchProblem();
+    }, [problemNumber]);
+    
+    const [canvasData, setCanvasData] = useState({
+        problemSummary: "",
+        solutionStrategy: "",
+        complexityAnalysis: {
+            timeAndSpace: ""
+        },
+        pseudocode: "",
+    });
+
+    const handleChange = async(e) => {
+        const {name, value} = e.target;
+        
+        if (name === "problemSummary") {
+            setCanvasData((prev) => ({...prev, problemSummary: value}));
+        } else if (name === "solutionStrategy") {
+            setCanvasData((prev) => ({...prev, solutionStrategy: value}));
+        } else if (name === "complexityAnalysis.timeAndSpace") {
+            setCanvasData((prev) => ({...prev, complexityAnalysis: {...prev.complexityAnalysis, timeAndSpace: value}}));
+        } else if (name === "pseudocode") {
+            setCanvasData((prev) => ({...prev, pseudocode: value}));
+        }
+        //setIsEdited(true);
+    };
+
+    const [solutionId, setSolutionId] = useState(null);
+
+
+    // 사고캔버스 → 코드 에디터로 이동
+    const handleSaveOrEdit = async () => {
+        setIsEdited(true);
+        setShowCanvas(true);
+        try {
+            if (!solutionId) {
+                console.log("보내는 문제 번호", problemNumber);
+                console.log("보내는 데이터", canvasData);
+                const response = await createSolutions(problemNumber, canvasData);
+                console.log("서버응답", response);
+
+                const newSolutionId = response?.result?.solutionId || response?.solutionId;
+                if (newSolutionId) {
+                    setSolutionId(newSolutionId);
+                    alert("저장 완료");
+                    console.log("✅ solutionId 저장됨:", newSolutionId);
+                } else {
+                    await updateSolution(solutionId, canvasData);
+                    alert("수정 완료!");
+                }
+            }
+        } catch (error) {
+            console.error("저장/수정 실패:", error);
+            alert("사고 과정 캔버스 작성 실패");
+        }
+    };
 
     useEffect(() => {
         const timer = setInterval(() => setTime((prev) => prev + 1), 1000);
@@ -30,44 +147,75 @@ const Solve = () => {
     const [modalShownOnce, setModalShownOnce] = useState(false); // 모달 1회만 표시
     const [aiEnabled, setAiEnabled] = useState(false); // AI 해설 버튼 활성화 여부
     const [showAI, setShowAI] = useState(false); // false = 문제 영역, true = AI 해설 영역
-    const [code, setCode] = useState("// JS 코드를 입력하고 실행 버튼을 눌러보세요\nconsole.log('Hello IDE!');");
+    const [code, setCode] = useState(templates["javascript"]);
     const [output, setOutput] = useState("");
+    //const [loading, setLoading] = useState(false);
 
     const [showAIComment, setShowAIComment] = useState(false);
 
-    // 사고캔버스 → 코드 에디터로 이동
-    const handleSaveOrEdit = () => {
-        setShowCanvas(true);
-        setIsEdited(true);
+    const [language, setLanguage] = useState("javascript");
+
+    
+
+    if (loading) return <div>로딩중...</div>;
+    if (error) return <div>문제 정보를 불러오지 못했습니다.</div>;
+    if (!problem) return <div>문제가 존재하지 않습니다.</div>;
+
+    const handleLanguageChange = (e) => {
+        const selectedLang = e.target.value;
+        setLanguage(selectedLang);
+        setCode(templates[selectedLang]); // 언어 변경 시 기본 코드 로드
     };
 
     // 코드 실행
-    const runCode = () => {
+    const runCode = async () => {
+        setOutput("코드를 실행 중입니다...");
         try {
-            let logs = [];
-            const originalLog = console.log;
-            console.log = (...args) => logs.push(args.join(" "));
+            const result = await runJudgeCode(problemNumber, language, code); // 👈 분리된 API 사용
+            console.log("실행결과", result);
+            // ✅ 모든 테스트케이스 출력 무시하고 → 첫 번째 actualOutput만 출력
+            const rawOutput = result?.result?.[0]?.actualOutput || "";
 
-            const result = eval(code);
-            console.log = originalLog;
-
-            setOutput(
-                logs.join("\n") + (result !== undefined ? `\n결과: ${result}` : "")
-            );
-
-            // ✅ 처음 한 번만 모달 표시
             if (!modalShownOnce) {
                 setShowRunModal(true);
                 setModalShownOnce(true);
             }
-
-            // ✅ 실행 후 AI 해설 버튼 활성화
             setAiEnabled(true);
-            console.log("실행 완료 → AI 해설 보기 버튼 활성화됨");
-            } catch (err) {
-            setOutput("에러: " + err.message);
+            setOutput(rawOutput.trim() || "출력 결과가 없습니다.");
+        } catch (err) {
+            setOutput("❌ 실행 중 오류가 발생했습니다.");
+        } finally {
+            setLoading(false);
         }
     };
+
+
+    // const runCode = () => {
+    //     try {
+    //         let logs = [];
+    //         const originalLog = console.log;
+    //         console.log = (...args) => logs.push(args.join(" "));
+
+    //         const result = eval(code);
+    //         console.log = originalLog;
+
+    //         setOutput(
+    //             logs.join("\n") + (result !== undefined ? `\n결과: ${result}` : "")
+    //         );
+
+    //         // ✅ 처음 한 번만 모달 표시
+    //         if (!modalShownOnce) {
+    //             setShowRunModal(true);
+    //             setModalShownOnce(true);
+    //         }
+
+    //         // ✅ 실행 후 AI 해설 버튼 활성화
+    //         setAiEnabled(true);
+    //         console.log("실행 완료 → AI 해설 보기 버튼 활성화됨");
+    //         } catch (err) {
+    //         setOutput("에러: " + err.message);
+    //     }
+    // };
 
     // ✅ AI 해설 보기/문제 보기 전환
     const handleToggleAI = () => {
@@ -77,9 +225,20 @@ const Solve = () => {
         }
     };
 
-    const handleSubmit = () => {
-        //clearInterval(timerId);
-        setShowSubmitModal(true);
+    const handleSubmit = async () => {
+        if (!solutionId) {
+            alert("먼저 사고캔버스를 저장하세요!");
+            return;
+        }
+    
+        try {
+            await submitSolution(solutionId);
+            alert("제출 완료!");
+            setShowSubmitModal(true);
+        } catch (error) {
+            console.error("제출 실패:", error);
+            alert("제출 중 오류 발생");
+        }
     };
 
     return (
@@ -87,7 +246,7 @@ const Solve = () => {
         {/* 상단 헤더 */}
         <div className="top-panel">
             <div className="top-panel-left">
-            <h1 className="problem-title">1003 피보나치 함수</h1>
+            <h1 className="problem-title">{problem.number} {problem.title}</h1>
 
             <div className="timer">⏱ {formatTime(time)}</div>
 
@@ -130,19 +289,19 @@ const Solve = () => {
                     <>
                     <section className="problem-section">
                         <h2>문제</h2>
-                        <div className="content-box">문제 내용이 들어갑니다.</div>
+                        <div className="content-box">{problem.content}</div>
                     </section>
 
                     <section className="condition-section">
                         <h2>조건</h2>
-                        <div className="content-box">조건 내용</div>
+                        <div className="content-box">{problem.inputDescription}</div>
                     </section>
 
                     <section className="io-section">
                         <h2>입력</h2>
-                        <div className="content-box">입력 설명</div>
+                        <div className="content-box">{problem.inputDescription}</div>
                         <h2>출력</h2>
-                        <div className="content-box">출력 설명</div>
+                        <div className="content-box">{problem.outputDescription}</div>
                     </section>
 
                     <section className="example-section">
@@ -163,8 +322,8 @@ const Solve = () => {
                         </p>
                         
                         <div className="canvas-item">
-                        <h3>1. 문제 요약</h3>
-                        <textarea readOnly value={`문제 요약`} />
+                            <h3>1. 문제 요약</h3>
+                            <textarea readOnly value={`문제 요약`} />       
                         </div>
 
                         <div className="canvas-item">
@@ -189,25 +348,44 @@ const Solve = () => {
             {showCanvas ? (
                 <>
                 <div className="editor-box">
-                    <Editor
-                    height="520px"
-                    defaultLanguage="javascript"
-                    value={code}
-                    onChange={(value) => setCode(value || "")}
-                    theme="vs-dark"
-                    />
-
-                    <div className="output-box">
-                    <pre>{output || "출력 결과가 여기에 표시됩니다."}</pre>
+                    {/* 언어 선택 드롭다운 */}
+                    <div className="language-select">
+                        <label htmlFor="language">언어 선택: </label>
+                        <select
+                        id="language"
+                        value={language}
+                        onChange={handleLanguageChange}
+                        >
+                        <option value="javascript">JavaScript</option>
+                        <option value="python">Python</option>
+                        <option value="java">Java</option>
+                        <option value="cpp">C++</option>
+                        <option value="c">C</option>
+                        </select>
                     </div>
 
+                    {/* 코드 에디터 */}
+                    <Editor
+                        height="530px"
+                        language={language}
+                        value={code}
+                        onChange={(value) => setCode(value || "")}
+                        theme="vs-dark"
+                    />
+
+                    {/* 출력 영역 */}
+                    <div className="output-box">
+                        <pre>{output || "출력 결과가 여기에 표시됩니다."}</pre>
+                    </div>
+
+                    {/* 버튼 영역 */}
                     <div className="btn-container">
-                    <button className="run-btn" onClick={runCode}>
+                        <button className="run-btn" onClick={runCode}>
                         실행
-                    </button>
-                    <button className="submit-btn" onClick={handleSubmit}>
+                        </button>
+                        <button className="submit-btn" onClick={handleSubmit}>
                         제출
-                    </button>
+                        </button>
                     </div>
                 </div>
                 </>
@@ -217,29 +395,29 @@ const Solve = () => {
                 <div className="canvas-box">
                     <div className="canvas-item">
                     <h3>1. 문제 요약</h3>
-                    <textarea placeholder="문제를 요약해 보세요." />
+                    <textarea name="problemSummary" placeholder="문제를 요약해 보세요." onChange={handleChange} />
                     </div>
 
                     <div className="canvas-item">
                     <h3>2. 해결 전략 정리</h3>
-                    <textarea placeholder="해결 전략을 정리하세요." />
+                    <textarea name="solutionStrategy" placeholder="해결 전략을 정리하세요." onChange={handleChange} />
                     </div>
 
                     <div className="canvas-item">
                     <h3>3. 시간/공간 복잡도 분석</h3>
-                    <textarea placeholder="복잡도를 분석하세요." />
+                    <textarea name="complexityAnalysis.timeAndSpace" placeholder="복잡도를 분석하세요." onChange={handleChange} />
                     </div>
 
                     <div className="canvas-item">
                     <h3>4. 의사 코드 (Pseudocode)</h3>
-                    <textarea placeholder="의사 코드를 작성하세요." />
+                    <textarea name="pseudocode" placeholder="의사 코드를 작성하세요." onChange={handleChange} />
                     </div>
 
                     <button
-                    className="submit-btn"
-                    onClick={handleSaveOrEdit}
-                    >
-                    {isEdited ? "수정" : "저장"}
+                        className="submit-btn"
+                            onClick={handleSaveOrEdit}
+                        >
+                        {isEdited ? "수정" : "저장"}
                     </button>
                 </div>
                 </>
@@ -250,47 +428,16 @@ const Solve = () => {
 
         {/* ✅ 모달창 (처음 실행 시 1회 표시) */}
         {showRunModal && (
-        <div className="modal-overlay">
-            <div className="modal-content">
-                <h2>AI 해설 기능 안내</h2>
-                <p>
-                    {`AI가 생성한 모범 답안(접근방식, 최적화 전략, 코드)를 볼 수 있습니다.\n이를 통해 어떤 부분을 개선할 수 있을지 스스로 분석하고\nAI로부터 상세한 비드백을 받을 수 있습니다.`}
-                </p>
 
-                <div className="modal-buttons">
-                    {/* 닫기 버튼 */}
-                    <button onClick={() => setShowRunModal(false)}>닫기</button>
-
-                    {/* AI 해설 보기 버튼 */}
-                    <button onClick={() => {
-                        setShowRunModal(false);
-                        setShowAIComment(true);
-                    }}>AI 해설 보기</button>
-                </div>                                                  
-            </div>
-        </div>
+            <SolveRunModal
+                isOpen={showRunModal}
+                onClose={() => setShowRunModal(false)}
+                onShowAIComment={() => setShowAIComment(true)}
+            />
         )}
 
         {showSubmitModal && (
-        <div className="modal-overlay">
-            <div className="modal-content">
-                <h2>코드가 제출되었습니다.</h2>
-                <p>
-                    {`성공`}
-                </p>
-
-                <div className="modal-buttons">
-                    {/* 닫기 버튼 */}
-                    <button onClick={() => setShowSubmitModal(false)}>닫기</button>
-
-                    {/* AI 해설 보기 버튼 */}
-                    {/* <button onClick={() => {
-                        setShowRunModal(false);
-                        setShowAIComment(true);
-                    }}>AI 해설 보기</button> */}
-                </div>                                                  
-            </div>
-        </div>
+            <SolveSubmitModal onClose={() => setShowSubmitModal(false)} />
         )}
 
         </div>

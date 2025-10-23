@@ -29,7 +29,7 @@ function App() {
           <Route path="edit" element={<EditInfo />} />
           <Route path="gpt" element={<GptHelp />} />
         </Route>
-        <Route path="/solve" element={<Solve />} />
+        <Route path="/problems/:problemNumber" element={<Solve />} />
       </Route>
     </Routes>
   );
