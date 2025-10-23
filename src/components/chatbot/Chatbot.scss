@@ -175,6 +175,27 @@
                 }
               }
             }
+
+            .chat-options {
+              margin-top: 8px;
+              display: flex;
+              flex-wrap: wrap;
+              gap: 6px;
+            }
+            
+            .option-btn {
+              background-color: #f3f3f3;
+              border: 1px solid #ccc;
+              border-radius: 8px;
+              padding: 5px 10px;
+              cursor: pointer;
+              transition: all 0.2s ease;
+            
+              &:hover {
+                background-color: #e6e6e6;
+              }
+            }
+            
           }
         }
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
+import { sendChatMessage } from '../../api/chatbotAPI';
 import './Chatbot.scss';
 
 const ChatBot = () => {
@@ -23,16 +23,14 @@ const ChatBot = () => {
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const chatRef = useRef(null);
-  const chatBodyRef = useRef(null); // <-- 실제 스크롤 컨테이너 ref
+  const chatBodyRef = useRef(null);
 
   const currentSession = sessions.find((s) => s.id === currentSessionId);
 
-  // 로컬스토리지 저장
   useEffect(() => {
     localStorage.setItem('chatSessions', JSON.stringify(sessions));
   }, [sessions]);
 
-  // 외부 클릭 시 닫기
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (chatRef.current && !chatRef.current.contains(e.target)) {
@@ -44,22 +42,18 @@ const ChatBot = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isOpen]);
 
-  // 스크롤 함수 (안정적)
   const scrollToBottom = () => {
     const el = chatBodyRef.current;
     if (!el) return;
-    // micro task로 보장 (DOM 업데이트 직후)
     requestAnimationFrame(() => {
       el.scrollTop = el.scrollHeight;
     });
   };
 
-  // 메시지나 로딩 상태 변경 시 자동 스크롤
   useEffect(() => {
     scrollToBottom();
   }, [currentSession?.messages.length, loading, currentSessionId]);
 
-  // 새 채팅 생성
   const createNewSession = () => {
     const newSession = {
       id: crypto.randomUUID(),
@@ -72,11 +66,9 @@ const ChatBot = () => {
     setCurrentSessionId(newSession.id);
   };
 
-  // 채팅 삭제
   const deleteSession = (id) => {
     setSessions((prev) => {
       const next = prev.filter((s) => s.id !== id);
-      // 현재 보고 있던 세션을 삭제했으면 첫 세션으로 전환
       if (id === currentSessionId) {
         if (next.length > 0) setCurrentSessionId(next[0].id);
       }
@@ -84,14 +76,12 @@ const ChatBot = () => {
     });
   };
 
-  // 메시지 전송
-  const sendMessage = async () => {
-    if (!input.trim()) return;
+  const sendMessage = async (customMessage) => {
+    const messageText = customMessage || input;
+    if (!messageText.trim()) return;
 
-    const messageText = input;
-    const userMessage = { sender: 'user', text: messageText, id: Date.now() };
+    const userMessage = { sender: 'user', text: messageText, id: crypto.randomUUID() };
 
-    // 세션에 유저 메시지 추가 및 제목 자동 설정(첫 메시지)
     setSessions((prev) =>
       prev.map((session) => {
         if (session.id === currentSessionId) {
@@ -103,26 +93,19 @@ const ChatBot = () => {
         return session;
       })
     );
+
     setInput('');
     setLoading(true);
 
     try {
-      const response = await axios.post(
-        'https://api.openai.com/v1/chat/completions',
-        {
-          model: 'gpt-4o-mini',
-          messages: [{ role: 'user', content: messageText }],
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${process.env.REACT_APP_OPENAI_API_KEY}`,
-            'Content-Type': 'application/json',
-          },
-        }
-      );
+      const { reply, options } = await sendChatMessage(messageText, currentSessionId);
 
-      const aiReply = response.data.choices[0].message.content;
-      const botMessage = { sender: 'bot', text: aiReply, id: Date.now() + 1 };
+      const botMessage = {
+        sender: 'bot',
+        text: reply || '답변이 없습니다.',
+        id: crypto.randomUUID(),
+        options: options || [], // ✅ 옵션 추가 저장
+      };
 
       setSessions((prev) =>
         prev.map((session) =>
@@ -133,7 +116,11 @@ const ChatBot = () => {
       );
     } catch (error) {
       console.error(error);
-      const errorMsg = { sender: 'bot', text: '에러가 발생했어요 😢 다시 시도해주세요.', id: Date.now() + 2 };
+      const errorMsg = {
+        sender: 'bot',
+        text: '에러가 발생했어요 😢 다시 시도해주세요.',
+        id: crypto.randomUUID(),
+      };
       setSessions((prev) =>
         prev.map((session) =>
           session.id === currentSessionId
@@ -156,6 +143,7 @@ const ChatBot = () => {
         <div className="chat-header">사용자</div>
 
         <div className="chat-content">
+          {/* 사이드바 */}
           <div className="chat-sidebar">
             <button className="new-chat-btn" onClick={createNewSession}>
               ＋ 새 채팅
@@ -182,12 +170,30 @@ const ChatBot = () => {
             </div>
           </div>
 
+          {/* 메인 채팅 영역 */}
           <div className="chat-main">
-            {/* 실제 스크롤 컨테이너에 ref 연결 */}
             <div className="chat-body" ref={chatBodyRef}>
               {currentSession?.messages.map((msg) => (
-                <div key={msg.id ?? Math.random()} className={`chat-message ${msg.sender === 'user' ? 'user' : 'bot'}`}>
-                  {msg.text}
+                <div
+                  key={msg.id ?? Math.random()}
+                  className={`chat-message ${msg.sender === 'user' ? 'user' : 'bot'}`}
+                >
+                  <div>{msg.text}</div>
+
+                  {/* ✅ 옵션 버튼 표시 */}
+                  {msg.options && msg.options.length > 0 && (
+                    <div className="chat-options">
+                      {msg.options.map((opt, idx) => (
+                        <button
+                          key={idx}
+                          className="option-btn"
+                          onClick={() => setInput(opt)} // 클릭 시 입력창에 자동 세팅
+                        >
+                          {opt}
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </div>
               ))}
 
@@ -207,8 +213,11 @@ const ChatBot = () => {
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="메시지를 입력하세요..."
                 onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
+                disabled={loading}
               />
-              <button onClick={sendMessage}>전송</button>
+              <button onClick={() => sendMessage()} disabled={loading}>
+                전송
+              </button>
             </div>
           </div>
         </div>
