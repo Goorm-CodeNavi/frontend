@@ -6,12 +6,12 @@ import LogIn from "./pages/login/LogIn";
 import SignUp from "./pages/signup/SignUp";
 import FindId from "./pages/findid/FindId";
 import MyPage from "./pages/mypage/MyPage";
-import PasswordReset from "./pages/passwordreset/PasswordReset";
 import StudyRecord from "./pages/mypage/sections/StudyRecord";
 import EditInfo from "./pages/mypage/sections/EditInfo";
 import GptHelp from "./pages/mypage/sections/GptHelp";
 import Solve from "./pages/solve/Solve";
 import MyRecordDetail from "./pages/mypage/MyRecordDetail";
+import ResetPassword from "./pages/resetpassword/ResetPassword";
 
 function App() {
   return (
@@ -23,7 +23,7 @@ function App() {
         <Route path="/login" element={<LogIn />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/find-id" element={<FindId />} />
-        <Route path="/passwordreset" element={<PasswordReset />} />
+        <Route path="/passwordreset" element={<ResetPassword />} />
         <Route path="/mypage" element={<MyPage />}>
           <Route index element={<Navigate to="study" replace />} />
           <Route path="study" element={<StudyRecord />} />
