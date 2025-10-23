@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const axiosInstance = axios.create({
+const CustomAxios = axios.create({
   baseURL: process.env.REACT_APP_BASE_URL,
   headers: {
     "Content-Type": "application/json",
@@ -8,7 +8,7 @@ const axiosInstance = axios.create({
 });
 
 // 요청 인터셉터
-axiosInstance.interceptors.request.use(
+CustomAxios.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("accessToken");
     //const token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNzYxMDQ2NjkyLCJleHAiOjE3NjEwNTAyOTJ9.36LKcaonBy6mWroFQNh2crUI50xnNYcVY6_1VsoIjqmAbF8oaK0JSjSG3Mrc_yBMvFDwzRlcLJgjhk3yn8j8QQ";
@@ -24,7 +24,7 @@ axiosInstance.interceptors.request.use(
 );
 
 // 응답 인터셉터
-axiosInstance.interceptors.response.use(
+CustomAxios.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
@@ -62,4 +62,4 @@ axiosInstance.interceptors.response.use(
   }
 );
 
-export default axiosInstance;
+export default CustomAxios;

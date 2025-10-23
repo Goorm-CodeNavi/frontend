@@ -1,11 +1,9 @@
-import axiosInstance from "./axiosInstance";
-
-const API_URL = "/api/solutions";
+import axiosInstance from "./axios";
 
 /// 사고 과정 캔버스 수정
 export const updateSolution = async (solutionId, data) => {
   try {
-    const response = await axiosInstance.put(`${API_URL}/${solutionId}/canvas`, data);
+    const response = await axiosInstance.put(`/api/solutions/${solutionId}/canvas`, data);
     return response.data;
   } catch (error) {
     console.error("사고 과정 캔버스 작성 실패:", error);
@@ -15,6 +13,6 @@ export const updateSolution = async (solutionId, data) => {
 
 // 사고캔버스 제출
 export const submitSolution = async (solutionId) => {
-  const response = await axiosInstance.post(`${API_URL}/solutions/${solutionId}/submit`);
+  const response = await axiosInstance.post(`/api/solutions/solutions/${solutionId}/submit`);
   return response.data;
 };
