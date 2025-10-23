@@ -11,7 +11,7 @@ export const updateSolution = async (solutionId, data) => {
   }
 };
 
-// 사고캔버스 제출
+// 코드 제출
 export const submitJudgeCode = async (solutionId, {language, code, timeSpent}) => {
   try {
     const response = await CustomAxios.post(`/api/solutions/${solutionId}/submit`, {

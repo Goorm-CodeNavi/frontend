@@ -136,11 +136,19 @@
           margin-bottom: 8px;
         }
 
+        .content-inout {
+          display: flex;
+          gap: 20px;
+          align-items: center;
+          padding: 10px;
+        }
+
         .content-box {
           background-color: #1a1a1a;
           padding: 10px;
           border-radius: 6px;
           min-height: 60px;
+          flex: 1;
         }
       }
 
