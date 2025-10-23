@@ -8,8 +8,13 @@ const CustomAxios = axios.create({
   withCredentials: true, // 쿠키(리프레시 토큰) 자동 전송
 });
 
+const isAuthPath = (url = "") => url.includes("/api/auth/");
+
 // 요청 인터셉터
 CustomAxios.interceptors.request.use((config) => {
+  // 로그인 등 토큰 불필요 요청
+  if (config.skipAuth) return config;
+
   const token = localStorage.getItem("accessToken");
   const tokenType = localStorage.getItem("tokenType") || "Bearer";
   if (token) config.headers.Authorization = `${tokenType} ${token}`;
@@ -21,6 +26,11 @@ CustomAxios.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
+
+    // auth 경로는 리프레시 시도 X (루프 방지)
+    if (isAuthPath(originalRequest?.url)) {
+      return Promise.reject(error);
+    }
 
     // 액세스 토큰 만료 (401)
     if (error.response && error.response.status === 401 && !originalRequest._retry) {

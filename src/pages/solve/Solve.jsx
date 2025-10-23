@@ -8,7 +8,8 @@ import { problemDetails } from '../../api/problemApi';
 import { createSolutions } from '../../api/problemApi';
 import { runJudgeCode } from '../../api/problemApi';
 import { updateSolution } from '../../api/solutionAPI';
-import { submitSolution } from '../../api/solutionAPI';
+import { submitJudgeCode } from '../../api/solutionAPI';
+import { fetchEditorial } from '../../api/problemApi';
 
 const templates = {
     javascript: `console.log("Hello, JavaScript!");`,
@@ -100,30 +101,33 @@ const Solve = () => {
 
     // 사고캔버스 → 코드 에디터로 이동
     const handleSaveOrEdit = async () => {
-        setIsEdited(true);
-        setShowCanvas(true);
         try {
             if (!solutionId) {
+                // 🔹 새로 생성 (처음 저장)
                 console.log("보내는 문제 번호", problemNumber);
                 console.log("보내는 데이터", canvasData);
                 const response = await createSolutions(problemNumber, canvasData);
-                console.log("서버응답", response);
-
                 const newSolutionId = response?.result?.solutionId || response?.solutionId;
                 if (newSolutionId) {
                     setSolutionId(newSolutionId);
-                    alert("저장 완료");
+                    setIsEdited(true);
+                    setShowCanvas(true);
+                    alert("저장 완료!");
                     console.log("✅ solutionId 저장됨:", newSolutionId);
-                } else {
-                    await updateSolution(solutionId, canvasData);
-                    alert("수정 완료!");
                 }
+            } else {
+                const response = await updateSolution(solutionId, canvasData);
+                alert("수정 완료!");
+                console.log("캔버스 수정 응답:", response);
+                console.log("현재 solutionId:", solutionId);
             }
         } catch (error) {
             console.error("저장/수정 실패:", error);
             alert("사고 과정 캔버스 작성 실패");
         }
     };
+    // setIsEdited(true);
+    // setShowCanvas(true);
 
     useEffect(() => {
         const timer = setInterval(() => setTime((prev) => prev + 1), 1000);
@@ -140,22 +144,43 @@ const Solve = () => {
         .padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
     };
 
+    const [aiEnabled, setAiEnabled] = useState(false); // AI 해설 버튼 활성화 여부
+
+    useEffect(() => {
+        if (aiEnabled && problemNumber) {
+        const fetchEditorialData = async () => {
+            try {
+            const editorialData = await fetchEditorial(problemNumber);
+            if (editorialData.isSuccess) {
+                setEditorial(editorialData.result);
+            } else {
+                console.error("AI 해설 불러오기 실패:", editorialData.message);
+            }
+            } catch (error) {
+            console.error("AI 해설 API 호출 중 오류:", error);
+            }
+        };
+    
+        fetchEditorialData();
+        }
+    }, [aiEnabled, problemNumber]);
+
     const [showCanvas, setShowCanvas] = useState(false); // true면 코드 에디터 보임
     const [isEdited, setIsEdited] = useState(false); // 저장 버튼 누름 여부
     const [showRunModal, setShowRunModal] = useState(false); // 모달창 표시 여부
     const [showSubmitModal, setShowSubmitModal] = useState(false);
     const [modalShownOnce, setModalShownOnce] = useState(false); // 모달 1회만 표시
-    const [aiEnabled, setAiEnabled] = useState(false); // AI 해설 버튼 활성화 여부
+    
     const [showAI, setShowAI] = useState(false); // false = 문제 영역, true = AI 해설 영역
     const [code, setCode] = useState(templates["javascript"]);
     const [output, setOutput] = useState("");
-    //const [loading, setLoading] = useState(false);
+    const [editorial, setEditorial] = useState(null);
 
     const [showAIComment, setShowAIComment] = useState(false);
 
     const [language, setLanguage] = useState("javascript");
 
-    
+    const [submitResult, setSubmitResult] = useState(null);
 
     if (loading) return <div>로딩중...</div>;
     if (error) return <div>문제 정보를 불러오지 못했습니다.</div>;
@@ -167,20 +192,27 @@ const Solve = () => {
         setCode(templates[selectedLang]); // 언어 변경 시 기본 코드 로드
     };
 
+    
+
+
     // 코드 실행
     const runCode = async () => {
         setOutput("코드를 실행 중입니다...");
+
+        if (!modalShownOnce) {
+            setShowRunModal(true);
+            setModalShownOnce(true);
+        }
+        //setAiEnabled(true);
+        setShowRunModal(true);
+
         try {
             const result = await runJudgeCode(problemNumber, language, code); // 👈 분리된 API 사용
             console.log("실행결과", result);
-            // ✅ 모든 테스트케이스 출력 무시하고 → 첫 번째 actualOutput만 출력
+            
             const rawOutput = result?.result?.[0]?.actualOutput || "";
 
-            if (!modalShownOnce) {
-                setShowRunModal(true);
-                setModalShownOnce(true);
-            }
-            setAiEnabled(true);
+            
             setOutput(rawOutput.trim() || "출력 결과가 없습니다.");
         } catch (err) {
             setOutput("❌ 실행 중 오류가 발생했습니다.");
@@ -190,32 +222,6 @@ const Solve = () => {
     };
 
 
-    // const runCode = () => {
-    //     try {
-    //         let logs = [];
-    //         const originalLog = console.log;
-    //         console.log = (...args) => logs.push(args.join(" "));
-
-    //         const result = eval(code);
-    //         console.log = originalLog;
-
-    //         setOutput(
-    //             logs.join("\n") + (result !== undefined ? `\n결과: ${result}` : "")
-    //         );
-
-    //         // ✅ 처음 한 번만 모달 표시
-    //         if (!modalShownOnce) {
-    //             setShowRunModal(true);
-    //             setModalShownOnce(true);
-    //         }
-
-    //         // ✅ 실행 후 AI 해설 버튼 활성화
-    //         setAiEnabled(true);
-    //         console.log("실행 완료 → AI 해설 보기 버튼 활성화됨");
-    //         } catch (err) {
-    //         setOutput("에러: " + err.message);
-    //     }
-    // };
 
     // ✅ AI 해설 보기/문제 보기 전환
     const handleToggleAI = () => {
@@ -225,21 +231,30 @@ const Solve = () => {
         }
     };
 
-    const handleSubmit = async () => {
-        if (!solutionId) {
-            alert("먼저 사고캔버스를 저장하세요!");
-            return;
-        }
     
-        try {
-            await submitSolution(solutionId);
-            alert("제출 완료!");
-            setShowSubmitModal(true);
-        } catch (error) {
-            console.error("제출 실패:", error);
-            alert("제출 중 오류 발생");
-        }
-    };
+
+    const handleSubmit = async () => {
+    if (!solutionId) {
+        alert("먼저 사고캔버스를 저장하세요!");
+        return;
+    }
+
+    try {
+        const result = await submitJudgeCode(solutionId, {
+            language,
+            code,
+            timeSpent: time * 1000, // 초 -> 밀리초
+        });
+        alert("제출 완료!");
+        console.log("제출 결과:", result);
+        setSubmitResult(result);
+        setShowSubmitModal(true);
+    } catch (error) {
+        console.error("제출 실패:", error);
+        alert("제출 중 오류가 발생했습니다.");
+    }
+};
+
 
     return (
         <div className="problem-page">
@@ -323,22 +338,22 @@ const Solve = () => {
                         
                         <div className="canvas-item">
                             <h3>1. 문제 요약</h3>
-                            <textarea readOnly value={`문제 요약`} />       
+                            <textarea readOnly value={canvasData.editorial.summary} />       
                         </div>
 
                         <div className="canvas-item">
                         <h3>2. 해결 전략 및 접근법</h3>
-                        <textarea readOnly value={`해결 전략 및 접근법`} />
+                        <textarea readOnly value={canvasData.editorial.strategy} />
                         </div>
 
                         <div className="canvas-item">
                         <h3>3. 시간/공간 복잡도 분석</h3>
-                        <textarea readOnly value={`시간/공간 복잡도 분석`} />
+                        <textarea readOnly value={canvasData.editorial.complexity.timeAndSpace} />
                         </div>
 
                         <div className="canvas-item">
                         <h3>4. 의사 코드 (Pseudocode)</h3>
-                        <textarea readOnly value={`의사코드`} />
+                        <textarea readOnly value={canvasData.editorial.pseudocode} />
                         </div>
                     </section>
                 )}
@@ -395,22 +410,34 @@ const Solve = () => {
                 <div className="canvas-box">
                     <div className="canvas-item">
                     <h3>1. 문제 요약</h3>
-                    <textarea name="problemSummary" placeholder="문제를 요약해 보세요." onChange={handleChange} />
+                    <textarea name="problemSummary" 
+                        placeholder="문제를 요약해 보세요."
+                        value={canvasData.problemSummary}
+                        onChange={handleChange} />
                     </div>
 
                     <div className="canvas-item">
                     <h3>2. 해결 전략 정리</h3>
-                    <textarea name="solutionStrategy" placeholder="해결 전략을 정리하세요." onChange={handleChange} />
+                    <textarea name="solutionStrategy" 
+                        placeholder="해결 전략을 정리하세요."
+                        value={canvasData.solutionStrategy}
+                        onChange={handleChange} />
                     </div>
 
                     <div className="canvas-item">
                     <h3>3. 시간/공간 복잡도 분석</h3>
-                    <textarea name="complexityAnalysis.timeAndSpace" placeholder="복잡도를 분석하세요." onChange={handleChange} />
+                    <textarea name="complexityAnalysis.timeAndSpace"
+                        placeholder="복잡도를 분석하세요."
+                        value={canvasData.complexityAnalysis.timeAndSpace}
+                        onChange={handleChange} />
                     </div>
 
                     <div className="canvas-item">
                     <h3>4. 의사 코드 (Pseudocode)</h3>
-                    <textarea name="pseudocode" placeholder="의사 코드를 작성하세요." onChange={handleChange} />
+                    <textarea name="pseudocode" 
+                        placeholder="의사 코드를 작성하세요." 
+                        value={canvasData.pseudocode}
+                        onChange={handleChange} />
                     </div>
 
                     <button
@@ -437,7 +464,10 @@ const Solve = () => {
         )}
 
         {showSubmitModal && (
-            <SolveSubmitModal onClose={() => setShowSubmitModal(false)} />
+            <SolveSubmitModal
+                onClose={() => setShowSubmitModal(false)}
+                result={submitResult} // 정답 여부 데이터
+            />
         )}
 
         </div>
