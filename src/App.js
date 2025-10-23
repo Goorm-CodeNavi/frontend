@@ -11,6 +11,7 @@ import StudyRecord from "./pages/mypage/sections/StudyRecord";
 import EditInfo from "./pages/mypage/sections/EditInfo";
 import GptHelp from "./pages/mypage/sections/GptHelp";
 import Solve from "./pages/solve/Solve";
+import MyRecordDetail from "./pages/mypage/MyRecordDetail";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
         <Route path="/mypage" element={<MyPage />}>
           <Route index element={<Navigate to="study" replace />} />
           <Route path="study" element={<StudyRecord />} />
+          <Route path="study/:solutionId" element={<MyRecordDetail />} />
           <Route path="edit" element={<EditInfo />} />
           <Route path="gpt" element={<GptHelp />} />
         </Route>

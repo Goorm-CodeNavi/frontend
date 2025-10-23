@@ -3,10 +3,20 @@ import Search from '../../../assets/img/ic_search.svg';
 import PrevIcon from '../../../assets/img/ic_arrow_left.svg';
 import NextIcon from '../../../assets/img/ic_arrow_right.svg';
 import { getMySubmissions } from '../../../api/userApi';
+import { useNavigate } from 'react-router-dom';
 
 const MAX_ROWS = 10;
 
 const StudyRecord = () => {
+    const navigate = useNavigate();
+
+    const goDetail = (submission) => {
+        // /mypage/study/:solutionId 로 이동 (필요하면 경로 바꿔도 됨)
+        navigate(`/mypage/study/${submission.solutionId}`, {
+            state: { submission }, // 목록에서 가진 데이터 그대로 넘김(옵션)
+        });
+    };
+
     // 탭(로컬 상태)
     const [selectedTab, setSelectedTab] = useState("제출");
     const [searchText, setSearchText] = useState("");
@@ -141,7 +151,10 @@ const StudyRecord = () => {
                                 {filtered.map((s, idx) => (
                                     <tr key={s.solutionId} ref={idx === 0 ? rowRef : null}>
                                         <td>{s.problemNumber}</td>
-                                        <td>{s.problemTitle}</td>
+                                        <td
+                                            className="title_link"
+                                            onClick={() => goDetail(s)}
+                                        >{s.problemTitle}</td>
                                         <td><span className="category_tag">#{s.language}</span></td>
                                         <td>
                                             <span className={`status ${s.status === '오답' ? 'fail' : ''}`}>
