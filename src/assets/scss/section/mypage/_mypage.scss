@@ -966,10 +966,20 @@
 
                         .description {
                             margin: 32px 0 35px 0;
-                            font-size: 14px;
-                            font-weight: 400;
-                            color: var(--white);
-                            line-height: 1.4;
+
+                            .desc_title {
+                                font-size: 14px;
+                                font-weight: 600;
+                                color: var(--white);
+                            }
+
+                            .desc_pre {
+                                font-family: var(--mainfont);
+                                font-size: 14px;
+                                font-weight: 400;
+                                color: var(--white);
+                                line-height: 1.4;
+                            }
                         }
                     }
 
@@ -1106,24 +1116,27 @@
                         width: 100%;
                         flex-direction: column;
                         background-color: #1e1e1e;
-                        padding: 16px;
+                        padding: 50px 40px;
                         border-radius: 28px;
                         box-shadow: 0 4px 8px rgba(0, 0, 0, .3);
 
-                        .language-select {
+                        .code_header {
                             display: flex;
                             align-items: center;
-                            gap: 8px;
-                            color: var(--ink);
-                            font-size: 14px;
+                            font-size: 16px;
+                            font-weight: 400;
+                            color: var(--white);
+                            gap: 15px;
+                        }
 
-                            select {
-                                background: #1e1e1e;
-                                color: var(--ink);
-                                border: 1px solid #444;
-                                border-radius: 6px;
-                                padding: 4px 8px;
-                            }
+                        .submit_code code {
+                            display: block;
+                            margin-top: 30px;
+                            font-size: 14px;
+                            font-weight: 400;
+                            color: var(--white);
+                            line-height: 1.4;
+                            word-break: break-all;
                         }
 
                         /* Monaco Editor 영역 높이는 컴포넌트에서 지정 */
