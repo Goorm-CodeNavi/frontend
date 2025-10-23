@@ -1,0 +1,147 @@
+.Login_wrap {
+  display: flex;
+  margin: 0 auto;
+  justify-content: center;
+
+  .login_container {
+    margin-top: 205px;
+    
+    h1 {
+      width: 100%;
+      text-align: center;
+      font-size: 40px;
+      font-weight: 400;
+      color: var(--white);
+    }
+
+    .input_id {
+      width: 100%;
+      margin-top: 90px;
+
+      input {
+        width: 585px;
+        background-color: var(--background);
+        font-family: var(--mainfont);
+        font-size: 14px;
+        color: var(--white);
+        padding: 28px 30px;
+        border-radius: 15px;
+        border: 1.5px solid var(--green);
+        outline: none;
+      }
+
+      &::placeholder {
+        color: #838383;
+        background-color: var(--background);
+        outline: none;
+      }
+    }
+
+    .input_pw {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 10px;
+      padding: 28px 30px;
+      border-radius: 15px;
+      border: 1.5px solid var(--green);
+      gap: 24px;
+
+      input {
+        flex: 1;
+        background-color: var(--background);
+        font-family: var(--mainfont);
+        font-size: 14px;
+        color: var(--white);
+        border: 0;
+        outline: none;
+      }
+
+      &::placeholder {
+        color: #838383;
+        background-color: var(--background);
+        outline: none;
+      }
+
+      .pw_visible {
+        width: 20px;
+        cursor: pointer;
+      }
+    }
+
+    .error-message {
+      margin-left: 5px;
+      margin-top: 10px;
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--red);
+    }
+
+    .login_btn {
+      width: 100%;
+      padding: 28px 0;
+      margin-top: 25px;
+      background-color: var(--background);
+      border-radius: 15px;
+      border: 1.5px solid var(--green);
+      color: var(--white);
+      font-family: var(--mainfont);
+      font-size: 16px;
+      font-weight: 400;
+      cursor: pointer;
+    }
+
+    .not_member {
+      display: flex;
+      width: 100%;
+      justify-content: end;
+      align-items: flex-end;
+      margin-top: 20px;
+      gap: 20px;
+
+      .text {
+        font-size: 14px;
+        font-weight: 400;
+        color: var(--white);
+      }
+
+      h4 {
+        padding: 0;
+        margin: 0;
+        font-size: 16px;
+        font-weight: 400;
+        color: var(--white);
+        font-style: bold;
+        cursor: pointer;
+      }
+    }
+
+    .divider {
+      width: 100%;
+      padding: 0;
+      margin-top: 30px;
+      border-bottom: 1.5px solid var(--blue);
+    }
+
+    .options {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 30px;
+      padding: 0 86px 300px 101px;
+
+      .find_id {
+        font-size: 14px;
+        font-weight: 400;
+        color: var(--white);
+        cursor: pointer;
+      }
+
+      .reset_pw {
+        font-size: 14px;
+        font-weight: 400;
+        color: var(--white);
+        cursor: pointer;
+      }
+    }
+  }
+}
