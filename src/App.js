@@ -11,7 +11,7 @@ import EditInfo from "./pages/mypage/sections/EditInfo";
 import GptHelp from "./pages/mypage/sections/GptHelp";
 import Solve from "./pages/solve/Solve";
 import MyRecordDetail from "./pages/mypage/MyRecordDetail";
-import ResetPassword from "./pages/passwordreset/ResetPassword";
+import ResetPassword from "./pages/resetpassword/ResetPassword";
 
 function App() {
   return (
