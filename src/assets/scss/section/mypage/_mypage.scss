@@ -404,14 +404,26 @@
                     background-color: var(--background);
                     cursor: pointer;
                 }
+
+                .dupl_btn.disabled {
+                    opacity: 0.5;
+                    pointer-events: none;  // 클릭 차단
+                    cursor: not-allowed;
+                }
             }
-            
+
             .warning {
                 margin-left: 5px;
                 margin-top: 10px;
                 font-size: 14px;
                 font-weight: 400;
                 color: var(--red);
+            }
+
+            .success {
+                font-size: 14px;
+                font-weight: 400;
+                color: var(--green);
             }
         }
 

@@ -27,3 +27,14 @@ export const getUserinfo = async () => {
   }
   return data.result;
 };
+
+// 아이디 중복 확인
+export const checkId = async (id) => {
+  const { data, status } = await CustomAxios.get("/api/auth/check-id", {
+    params: { id },
+    skipAuth: true,
+    validateStatus: (s) => [200, 400, 409].includes(s),
+  });
+
+  return { status, data };
+};

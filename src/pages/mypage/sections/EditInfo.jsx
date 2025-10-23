@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import Hide from '../../../assets/img/ic_hide.svg';
 import Seek from '../../../assets/img/ic_seek.svg';
 import { useUser } from '../../../contexts/UserContext';
+import { checkId } from '../../../api/userApi';
 
 const EditInfo = () => {
     const { user } = useUser();
@@ -18,17 +19,68 @@ const EditInfo = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
 
+    // 중복확인 상태
+    const [checking, setChecking] = useState(false);
+    const [checkMsg, setCheckMsg] = useState("");
+    const [checkStatus, setCheckStatus] = useState("idle");
+
     useEffect(() => {
         setUsername(user?.username || "");
         setEmail(user?.email || "");
         setNotionEmail(user?.email || "");
+        // 유저가 바뀌면 메시지 초기화
+        setCheckMsg("");
+        setCheckStatus("idle");
     }, [user]);
+
+    // 사용자가 username을 다시 수정하면 결과 초기화
+    useEffect(() => {
+        setCheckMsg("");
+        setCheckStatus("idle");
+    }, [username]);
 
     // 비밀번호 일치 여부
     const isMismatch = confirmPassword.length > 0 && password !== confirmPassword;
 
-    //     const [id, setId] = useState('old@email.com')
-    // <input value={id} onChange={(e) => setIc(e.target.value)} />
+    const canCheck = useMemo(() => {
+        const curr = (username || "").trim();
+        const original = (user?.username || "").trim();
+        return curr.length > 0 && curr !== original && !checking;
+    }, [username, user?.username, checking]);
+
+    const handleCheckId = async () => {
+        const id = (username || "").trim();
+
+        // 버튼이 비활성화 조건이면 그냥 종료
+        if (!canCheck) return;
+
+        try {
+            setChecking(true);
+            setCheckMsg("");
+            setCheckStatus("idle");
+
+            const { status, data } = await checkId(id);
+
+            if (status === 200) {
+                setCheckMsg(data?.result || "사용 가능한 아이디입니다.");
+                setCheckStatus("ok");
+            } else if (status === 409) {
+                setCheckMsg(data?.message || "이미 존재하는 아이디입니다.");
+                setCheckStatus("conflict");
+            } else if (status === 400) {
+                setCheckMsg(data?.result || "잘못된 요청입니다. 아이디를 다시 확인해주세요.");
+                setCheckStatus("error");
+            } else {
+                setCheckMsg("예상치 못한 오류가 발생했어요.");
+                setCheckStatus("error");
+            }
+        } catch (e) {
+            setCheckMsg("네트워크 오류가 발생했어요. 잠시 후 다시 시도해주세요.");
+            setCheckStatus("error");
+        } finally {
+            setChecking(false);
+        }
+    };
 
     return (
         <div className='EditInfo_wrap'>
@@ -38,9 +90,26 @@ const EditInfo = () => {
                     <div className="title">아이디</div>
                     <div className="id">
                         <input type="text" className='id_input' value={username} onChange={(e) => setUsername(e.target.value)} />
-                        <div className="dupl_btn">중복 확인</div>
+                        <div
+                            className={`dupl_btn ${canCheck ? "" : "disabled"}`}
+                            onClick={checking ? undefined : handleCheckId}
+                            aria-disabled={!canCheck}
+                        >
+                            {checking ? "확인 중..." : "중복 확인"}
+                        </div>
                     </div>
-                    <div className="warning">이미 사용 중인 아이디입니다.</div>
+                    {checkStatus !== "idle" && (
+                        <div
+                            className={
+                                checkStatus === "ok"
+                                    ? "success"
+                                    : "warning"
+                            }
+                            style={{ marginLeft: 5, marginTop: 10 }}
+                        >
+                            {checkMsg}
+                        </div>
+                    )}
                 </div>
                 <div className="edit_pw">
                     <div className="title">비밀번호</div>
