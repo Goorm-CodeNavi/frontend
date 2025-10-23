@@ -13,7 +13,9 @@ const isAuthPath = (url = "") => url.includes("/api/auth/");
 // 요청 인터셉터
 CustomAxios.interceptors.request.use((config) => {
   // 로그인 등 토큰 불필요 요청
-  if (config.skipAuth) return config;
+  if (config.skipAuth) {
+    return config;
+  }
 
   const token = localStorage.getItem("accessToken");
   const tokenType = localStorage.getItem("tokenType") || "Bearer";
