@@ -27,7 +27,7 @@ const MyPage = () => {
             <aside>
                 <img src={Profile} alt="Profile" />
                 <div className="user_id">{username || "-"}</div>
-                <div className="together">함께 한 지 D+{togetherDate}</div>
+                <div className="together">함께 한 지 D+{togetherDate + 1}</div>
                 <div className="divider"></div>
                 <div className="mypage_menu">
                     <div
