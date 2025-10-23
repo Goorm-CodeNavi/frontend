@@ -38,3 +38,22 @@ export const checkId = async (id) => {
 
   return { status, data };
 };
+
+// 내 제출 기록 조회
+export const getMySubmissions = async ({ page = 0, size = 10 } = {}) => {
+  const { data } = await CustomAxios.get("/api/users/me/submissions", {
+    params: { page, size },
+  });
+
+  if (!data?.isSuccess) {
+    throw new Error(data?.message || "제출 기록 조회 실패");
+  }
+
+  return data.result || {
+    content: [],
+    pageable: { pageNumber: page, pageSize: size },
+    totalPages: 1,
+    totalElements: 0,
+    last: true,
+  };
+};
