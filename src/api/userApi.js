@@ -111,6 +111,32 @@ export const verifyCodeAndFindId = async (email, code) => {
   // 누락된 반환 구문 추가
   return { data, status };
 };
+export const updateUserInfo = async (updateData) => {
+  try {
+    const response = await CustomAxios.put(
+      "/api/users/me",
+      updateData,
+      {
+        skipAuth: false,
+        validateStatus: (s) => (s >= 200 && s < 300) || s === 400 || s === 404,
+      }
+    );
+    return { status: response.status, data: response.data };
+  } catch (error) {
+    console.error("정보 수정 요청 실패:", error);
+
+    // ✅ 응답이 있을 때는 그대로 전달 (catch에서 reject 안 되게)
+    if (error.response) {
+      return { status: error.response.status, data: error.response.data };
+    }
+
+    // ✅ 네트워크 진짜 오류일 때만 catch 메시지로 보냄
+    return {
+      status: 500,
+      data: { message: "네트워크 오류 또는 서버 응답 없음" },
+    };
+  }
+};
 
 // 제출 상세 조회
 export const getSolutionDetail = async (solutionId) => {

@@ -7,7 +7,8 @@ import SignUp from "./pages/signup/SignUp";
 import FindId from "./pages/findid/FindId";
 import MyPage from "./pages/mypage/MyPage";
 import StudyRecord from "./pages/mypage/sections/StudyRecord";
-import EditInfo from "./pages/mypage/sections/EditInfo";
+// [수정] .jsx 확장자를 명시적으로 추가
+import EditInfo from "./pages/mypage/sections/EditInfo.jsx";
 import GptHelp from "./pages/mypage/sections/GptHelp";
 import Solve from "./pages/solve/Solve";
 import MyRecordDetail from "./pages/mypage/MyRecordDetail";
