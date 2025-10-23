@@ -84,7 +84,7 @@ const LogIn = () => {
         <div className="divider"></div>
         <div className="options">
           <div className="find_id" onClick={() => navigate("/find-id")}>아이디 찾기</div>
-          <div className="reset_pw" onClick={() => navigate("/passwordreset")}>비밀번호 재설정</div>
+          <div className="reset_pw" onClick={() => navigate("/passwordreset")}>임시 비밀번호 발급</div>
         </div>
       </div>
     </div>

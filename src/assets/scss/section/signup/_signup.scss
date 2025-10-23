@@ -326,12 +326,21 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            width: 100%;
             padding: 28px 0;
-            border-radius: 15px;
-            border: 1.5px solid var(--green);
             font-size: 16px;
             font-weight: 400;
+            color: var(--white);
+            border-radius: 15px;
+            border: 1.5px solid var(--green);
+            background-color: transparent;   // ✅ 중복확인 버튼처럼 투명 배경
             cursor: pointer;
+            transition: background-color 0.2s ease, color 0.2s ease;
+
+            &:hover {
+                background-color: var(--green);
+                color: var(--background);    // ✅ hover 시 반전 효과 (선택)
+            }
         }
     }
 }
