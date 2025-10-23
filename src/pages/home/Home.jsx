@@ -1,13 +1,20 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import MainLogo from "../../assets/img/ic_mainlogo.svg";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import { useUser } from "../../contexts/UserContext";
+import { getRecommendedProblem } from "../../api/userApi";
 
 const Home = () => {
   const navigate = useNavigate();
   const { isLoggedIn } = useAuth();
   const { user, loading } = useUser();
+
+  // 추천 문제 상태
+  const [recLoading, setRecLoading] = useState(false);
+  const [recError, setRecError] = useState("");
+  const [recommended, setRecommended] = useState(null); // { title, content, inputDescription, outputDescription, link }
+
 
   // ✅ 가입일(createdAt 또는 joinedAt) 기준으로 서비스 이용일 계산
   const getTogetherDays = () => {
@@ -31,8 +38,35 @@ const Home = () => {
   const userName = user?.username || "사용자";
   const together = getTogetherDays();
 
-  const problemNumber = 1003; // TODO: 문제 API 연동
-  const problemTitle = "피보나치 함수";
+  // const problemNumber = 1003; // TODO: 문제 API 연동
+  // const problemTitle = "피보나치 함수";
+
+  // ✅ 로그인 사용자일 때만 추천 문제 호출
+  useEffect(() => {
+    const fetchRecommended = async () => {
+      if (!isLoggedIn) return;
+      try {
+        setRecLoading(true);
+        setRecError("");
+        const res = await getRecommendedProblem();
+        setRecommended(res);
+      } catch (e) {
+        if (e?.status === 404) {
+          setRecError("추천할 문제가 없습니다.");
+        } else {
+          setRecError(e?.message || "추천 문제를 불러오지 못했습니다.");
+        }
+        setRecommended(null);
+      } finally {
+        setRecLoading(false);
+      }
+    };
+    fetchRecommended();
+  }, [isLoggedIn]);
+
+  // 내용 짤막히 보여주기
+  const snippet = (text = "", max = 140) =>
+    text.length > max ? text.slice(0, max) + "…" : text;
 
   if (loading) return <div className="Home_wrap">로딩 중...</div>;
 
@@ -57,7 +91,7 @@ const Home = () => {
                   <div className="together_day">
                     <div className="logo">CODENAVI</div>
                     <div className="text">와 함께 한 지</div>
-                    <div className="date">{together}</div>
+                    <div className="date">{together + 1}</div>
                     <div className="text">일이 되었군요!</div>
                   </div>
 
@@ -75,17 +109,46 @@ const Home = () => {
                 </div>
 
                 <div className="today">
-                  <div className="problem_title">
-                    <div className="problem_info">
-                      <div className="number">{problemNumber}</div>
-                      <div className="name">{problemTitle}</div>
+                  {recLoading ? (
+                    <div className="problem_title">
+                      <div className="problem_info">
+                        <div className="name">추천 문제를 불러오는 중…</div>
+                      </div>
                     </div>
-                    <div className="goto_solve">문제 풀기</div>
-                  </div>
-                  <div className="problem_content">
-                    {/* TODO: 문제 받아오기 */}
-                    문제에 대한 내용을 띄워주는 공간입니다.
-                  </div>
+                  ) : recError ? (
+                    <div className="problem_title">
+                      <div className="problem_info">
+                        <div className="name">{recError}</div>
+                      </div>
+                    </div>
+                  ) : recommended ? (
+                    <>
+                      <div className="problem_title">
+                        <div className="problem_info">
+                          <div className="name">{recommended.title}</div>
+                        </div>
+                        <div
+                          className="goto_solve"
+                          onClick={() =>
+                            recommended.link
+                              ? navigate(recommended.link)
+                              : navigate("/problems") // 링크 없을 때 대체 경로
+                          }
+                        >
+                          문제 풀기
+                        </div>
+                      </div>
+                      <div className="problem_content">
+                        {snippet(recommended.content || "")}
+                      </div>
+                    </>
+                  ) : (
+                    <div className="problem_title">
+                      <div className="problem_info">
+                        <div className="name">추천할 문제가 없습니다.</div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

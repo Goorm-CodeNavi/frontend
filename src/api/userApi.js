@@ -111,6 +111,8 @@ export const verifyCodeAndFindId = async (email, code) => {
   // 누락된 반환 구문 추가
   return { data, status };
 };
+
+// 내 정보 수정
 export const updateUserInfo = async (updateData) => {
   try {
     const response = await CustomAxios.put(
@@ -138,3 +140,30 @@ export const updateUserInfo = async (updateData) => {
   }
 };
 
+// 추천 문제 조회
+export const getRecommendedProblem = async () => {
+  const { data, status } = await CustomAxios.get(
+    "/api/problems/recommeded",
+    {
+      // 200/401/404는 정상 흐름으로 컴포넌트에서 분기 처리
+      validateStatus: (s) => [200, 401, 404].includes(s),
+    }
+  );
+
+  if (status === 200 && data?.isSuccess) {
+    return data.result; // { title, content, inputDescription, outputDescription, link }
+  }
+
+  // 401/404는 메세지와 함께 throw (컴포넌트에서 잡아서 표기)
+  const msg =
+    data?.message ||
+    (status === 401
+      ? "인증에 실패했습니다."
+      : status === 404
+        ? "추천할 문제가 없습니다."
+        : "알 수 없는 오류가 발생했습니다.");
+
+  const err = new Error(msg);
+  err.status = status;
+  throw err;
+};
