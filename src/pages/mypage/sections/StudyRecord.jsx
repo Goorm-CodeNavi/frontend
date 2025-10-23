@@ -11,8 +11,7 @@ const StudyRecord = () => {
     const navigate = useNavigate();
 
     const goDetail = (submission) => {
-        // /mypage/study/:solutionId 로 이동 (필요하면 경로 바꿔도 됨)
-        navigate(`/mypage/study/${submission.solutionId}`, {
+        navigate(`/mypage/${submission.solutionId}`, {
             state: { submission }, // 목록에서 가진 데이터 그대로 넘김(옵션)
         });
     };

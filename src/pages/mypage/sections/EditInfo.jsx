@@ -42,6 +42,9 @@ const EditInfo = () => {
     // 비밀번호 일치 여부
     const isMismatch = confirmPassword.length > 0 && password !== confirmPassword;
 
+    // 비밀번호 길이 부족 여부
+    const isTooShort = password.length > 0 && password.length < 8;
+
     const canCheck = useMemo(() => {
         const curr = (username || "").trim();
         const original = (user?.username || "").trim();
@@ -134,9 +137,13 @@ const EditInfo = () => {
                         </div>
                         <img src={showPwCheck ? Seek : Hide} onClick={() => setShowPwCheck(v => !v)} alt="Hide" />
                     </div>
-                    {/* 비밀번호 불일치 시만 표시 */}
-                    {isMismatch && (
-                        <div className="warning">비밀번호가 일치하지 않습니다.</div>
+                    {/* 비밀번호 경고 문구 */}
+                    {(isTooShort || isMismatch) && (
+                        <div className="warning">
+                            {isTooShort
+                                ? "8자리 이상의 비밀번호로 설정해주세요."
+                                : "비밀번호가 일치하지 않습니다."}
+                        </div>
                     )}
                 </div>
                 <div className="edit_email">

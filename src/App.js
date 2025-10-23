@@ -27,10 +27,10 @@ function App() {
         <Route path="/mypage" element={<MyPage />}>
           <Route index element={<Navigate to="study" replace />} />
           <Route path="study" element={<StudyRecord />} />
-          <Route path="study/:solutionId" element={<MyRecordDetail />} />
           <Route path="edit" element={<EditInfo />} />
           <Route path="gpt" element={<GptHelp />} />
         </Route>
+          <Route path="mypage/:solutionId" element={<MyRecordDetail />} />
         <Route path="/problems/:problemNumber" element={<Solve />} />
       </Route>
     </Routes>

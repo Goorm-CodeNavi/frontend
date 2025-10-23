@@ -112,3 +112,39 @@ export const verifyCodeAndFindId = async (email, code) => {
   return { data, status };
 };
 
+// 제출 상세 조회
+export const getSolutionDetail = async (solutionId) => {
+  const { data, status } = await CustomAxios.get(`/api/solutions/${solutionId}`, {
+    validateStatus: (s) => [200, 401, 403, 404].includes(s),
+  });
+
+  if (status === 200 && data?.isSuccess) {
+    return data.result;
+  }
+
+  const msg =
+    data?.message ||
+    (status === 401
+      ? "인증에 실패했습니다."
+      : status === 403
+        ? "권한이 없습니다."
+        : status === 404
+          ? "해당 제출 기록을 찾을 수 없습니다."
+          : "알 수 없는 오류가 발생했습니다.");
+
+  throw new Error(msg);
+};
+
+// 임시 비밀번호 발급
+export const issueTempPassword = async (username, email) => {
+  const { data, status } = await CustomAxios.post(
+    "/api/auth/reset-password/issue-temporary",
+    { username, email },
+    { 
+      skipAuth: true,
+      validateStatus: (s) => [200, 400].includes(s),
+     }
+  );
+  
+  return { data, status };
+};
