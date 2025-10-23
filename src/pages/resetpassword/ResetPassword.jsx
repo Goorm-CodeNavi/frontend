@@ -2,68 +2,51 @@ import React, { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import FinishTemppwModal from './Modal/FinishTemppwModal';
 import NoEmailModal from './Modal/NoEmailModal';
+import { issueTempPassword } from '../../api/userApi';
 
 const ResetPassword = () => {
     const navigate = useNavigate();
 
     const [id, setId] = useState('');
     const [email, setEmail] = useState('');
-    const [showUnder, setShowUnder] = useState(false); // 인증번호 입력 섹션 표시
-    const [code, setCode] = useState('');
-    const [isVerified, setIsVerified] = useState(false); // 인증 완료 여부
 
+    // 모달 상태 | 로딩
     const [showIssued, setShowIssued] = useState(false);
     const [tempPw, setTempPw] = useState('');
-    const [showNoEmail, setShowNoEmail] = useState(true);
+    const [showNoEmail, setShowNoEmail] = useState(false);
+    const [loading, setLoading] = useState(false);
 
-    const canSendCode = useMemo(
-        () => !!id.trim() && !!email.trim() && !isVerified,
-        [id, email, isVerified]
-    );
+    // 이메일 유효성 검사
+    const isValidEmail = useMemo(() => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email.trim());
+    }, [email]);
 
-    const handleSendCode = async () => {
-        if (!canSendCode) return;
+    // 버튼 활성화(아이디 + 이메일 유효 시)
+    const canIssue = useMemo(() => !!id.trim() && isValidEmail, [id, isValidEmail]);
 
-        const confirmed = window.confirm(`${email} 으로 인증번호를 보내시겠습니까?`);
-        if (!confirmed) return;
+    const handleIssue = async () => {
+        if (!canIssue) return;
+        try {
+            setLoading(true);
+            const { data, status } = await issueTempPassword(id.trim(), email.trim());
 
-        // TODO: 실제 인증번호 전송 API
-        // await sendResetPasswordCode({ id, email })
-
-        setShowUnder(true);
+            if (status === 200 && data?.isSuccess) {
+                setShowIssued(true);
+            } else if (status === 400) {
+                const msg = data?.result || data?.message || '잘못된 요청입니다.';
+                alert(msg);
+            } else {
+                alert(data?.message || '처리 중 오류가 발생했습니다.');
+            }
+        } catch (e) {
+            alert('네트워크 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+        } finally {
+            setLoading(false);
+        }
     };
 
-    const handleVerify = async () => {
-        if (!code.trim()) {
-            alert('인증번호를 입력해주세요.');
-            return;
-        }
-
-        // TODO: 실제 인증 검증 API
-        // const { isValid, tempPassword } = await verifyResetCode({ id, email, code });
-
-        // 데모: 123456 이면 성공, 임시 비번 랜덤 생성
-        const isValid = code === '123456';
-        if (!isValid) {
-            alert('인증번호가 알맞지 않습니다. 다시 인증해주세요.');
-            return;
-        }
-
-        setIsVerified(true);// 데모: id가 'nouser'이면 유저 없음으로 가정
-        const hasUser = id.trim().toLowerCase() !== 'nouser';
-
-        if (!hasUser) {
-            setShowNoEmail(true);
-            return;
-        }
-
-        // 유저가 있는 경우 임시 비밀번호 발급 모달
-        const randomTemp = `tmp-${Math.random().toString(36).slice(2, 8)}`;
-        setTempPw(randomTemp);
-        setShowIssued(true);
-    };
-
-    const closeModalAndGoLogin = () => {
+    const closeIssuedAndGoLogin = () => {
         setShowIssued(false);
         navigate('/login');
     };
@@ -78,7 +61,6 @@ const ResetPassword = () => {
                         placeholder="아이디를 입력해 주세요"
                         value={id}
                         onChange={(e) => setId(e.target.value)}
-                        disabled={isVerified}
                     />
                 </div>
                 <div className="email_input">
@@ -87,34 +69,31 @@ const ResetPassword = () => {
                         placeholder="이메일을 입력해 주세요"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        disabled={isVerified}
                     />
-                    <div
-                        className={`send ${canSendCode ? '' : 'disabled'}`}
-                        onClick={canSendCode ? handleSendCode : undefined}
-                        aria-disabled={!canSendCode}
-                    >
-                        인증번호 전송
-                    </div>
                 </div>
-                {showUnder && !isVerified && (
-                    <div className="after">
-                        <div className="code_input">
-                            <input
-                                type="text"
-                                placeholder="인증번호를 입력해 주세요"
-                                value={code}
-                                onChange={(e) => setCode(e.target.value)}
-                            />
-                        </div>
-                        <div className="divider" />
-                        <div className="submit_btn" onClick={handleVerify}>
-                            임시 비밀번호 발급받기
-                        </div>
+                {/* 이메일 형식 오류 안내 */}
+                {email.length > 0 && !isValidEmail && (
+                    <div className="warning">
+                        올바른 이메일 형식이 아닙니다.
                     </div>
                 )}
+                <div className="divider"></div>
+                <div
+                    className={`submit_btn ${canIssue ? '' : 'disabled'}`}
+                    onClick={canIssue ? handleIssue : undefined}
+                    aria-disabled={!canIssue}
+                >
+                    {loading ? '처리 중...' : '임시 비밀번호 발급받기'}
+                </div>
             </div>
-            <FinishTemppwModal open={showIssued} onClose={closeModalAndGoLogin} />
+
+            {/* 임시 비밀번호 발급 완료 모달 */}
+            <FinishTemppwModal
+                open={showIssued}
+                onClose={closeIssuedAndGoLogin}
+            />
+
+            {/* 유저 없음 모달 */}
             {showNoEmail && (
                 <div className="modal_overlay" onClick={() => setShowNoEmail(false)}>
                     <div className="modal" onClick={(e) => e.stopPropagation()}>
