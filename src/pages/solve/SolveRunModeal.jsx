@@ -10,7 +10,13 @@ const SolveRunModal = ({ isOpen, onClose, onShowAIComment }) => {
         </p>
 
         <div className="modal-buttons">
-          <button onClick={onClose}>닫기</button>
+        <button
+            onClick={() => {
+              onClose();
+            }}
+          >
+            닫기
+          </button>
           <button
             onClick={() => {
               onClose();

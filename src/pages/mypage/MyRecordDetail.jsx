@@ -50,15 +50,17 @@ const languageForMonaco = (langKey) => {
     return 'plaintext';
 };
 
-// 초 → HH:MM:SS
-const formatHMS = (seconds) => {
-    if (typeof seconds !== 'number' || seconds < 0) return '-';
-    const h = Math.floor(seconds / 3600);
-    const m = Math.floor((seconds % 3600) / 60);
-    const s = seconds % 60;
+// 밀리초 → HH:MM:SS
+const formatHMS = (milliseconds) => {
+    if (typeof milliseconds !== 'number' || milliseconds < 0) return '-';
+    const totalSeconds = Math.floor(milliseconds / 1000); // ✅ 밀리초 → 초 변환
+    const h = Math.floor(totalSeconds / 3600);
+    const m = Math.floor((totalSeconds % 3600) / 60);
+    const s = totalSeconds % 60;
     const pad = (n) => String(n).padStart(2, '0');
     return `${pad(h)}:${pad(m)}:${pad(s)}`;
 };
+
 
 const MyRecordDetail = () => {
     const { solutionId } = useParams();
@@ -81,6 +83,7 @@ const MyRecordDetail = () => {
                 setLoadError('');
                 const res = await getSolutionDetail(solutionId);
                 setDetail(res);
+                console.log(res);
 
                 // 제출 코드/언어 설정 (userImplementation)
                 const implLangKey = toLangKey(res?.userImplementation?.language);
