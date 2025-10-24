@@ -112,12 +112,13 @@ const Solve = () => {
                     setSolutionId(newSolutionId);
                     setIsEdited(true);
                     setShowCanvas(true);
-                    alert("저장 완료!");
+                    //alert("저장 완료!");
                     console.log("✅ solutionId 저장됨:", newSolutionId);
                 }
             } else {
                 const response = await updateSolution(solutionId, canvasData);
-                alert("수정 완료!");
+                //alert("수정 완료!");
+                setShowCanvas(true);
                 console.log("캔버스 수정 응답:", response);
                 console.log("현재 solutionId:", solutionId);
             }
@@ -226,18 +227,6 @@ const Solve = () => {
         }
     };
 
-
-
-    // ✅ AI 해설 보기/문제 보기 전환
-    const handleToggleAI = () => {
-        if (setAiEnabled) {
-            setShowAI((prev) => !prev);
-            setShowAIComment((prev) => !prev);
-        }
-    };
-
-    
-
     const handleSubmit = async () => {
     if (!solutionId) {
         alert("먼저 사고캔버스를 저장하세요!");
@@ -274,14 +263,14 @@ const Solve = () => {
             <button
                 className="AI-commentary-btn"
                 disabled={!aiEnabled}
-                onClick={handleToggleAI}
+                onClick={() => setShowAIComment((prev) => !prev)}
                 style={{
                 opacity: aiEnabled ? 1 : 0.5,
                 cursor: aiEnabled ? "pointer" : "not-allowed",
                 color: "white",
                 }}
             >
-                {showAI ? "문제 보기" : "AI 해설 보기"}
+                {showAIComment ? "문제 보기" : "AI 해설 보기"}
             </button>
             </div>
 
