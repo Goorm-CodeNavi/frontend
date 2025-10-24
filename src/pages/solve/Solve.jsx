@@ -112,12 +112,13 @@ const Solve = () => {
                     setSolutionId(newSolutionId);
                     setIsEdited(true);
                     setShowCanvas(true);
-                    alert("저장 완료!");
+                    //alert("저장 완료!");
                     console.log("✅ solutionId 저장됨:", newSolutionId);
                 }
             } else {
                 const response = await updateSolution(solutionId, canvasData);
-                alert("수정 완료!");
+                //alert("수정 완료!");
+                setShowCanvas(true);
                 console.log("캔버스 수정 응답:", response);
                 console.log("현재 solutionId:", solutionId);
             }
@@ -145,6 +146,12 @@ const Solve = () => {
     };
 
     const [aiEnabled, setAiEnabled] = useState(false); // AI 해설 버튼 활성화 여부
+    const [editorial, setEditorial] = useState({
+        summary: "",
+        strategy: "",
+        complexity: { time: "", space: "" },
+        pseudocode: ""
+    });
 
     useEffect(() => {
         if (aiEnabled && problemNumber) {
@@ -174,7 +181,6 @@ const Solve = () => {
     const [showAI, setShowAI] = useState(false); // false = 문제 영역, true = AI 해설 영역
     const [code, setCode] = useState(templates["javascript"]);
     const [output, setOutput] = useState("");
-    const [editorial, setEditorial] = useState(null);
 
     const [showAIComment, setShowAIComment] = useState(false);
 
@@ -203,7 +209,7 @@ const Solve = () => {
             setShowRunModal(true);
             setModalShownOnce(true);
         }
-        //setAiEnabled(true);
+        setAiEnabled(true);
         setShowRunModal(true);
 
         try {
@@ -220,18 +226,6 @@ const Solve = () => {
             setLoading(false);
         }
     };
-
-
-
-    // ✅ AI 해설 보기/문제 보기 전환
-    const handleToggleAI = () => {
-        if (setAiEnabled) {
-            setShowAI((prev) => !prev);
-            setShowAIComment((prev) => !prev);
-        }
-    };
-
-    
 
     const handleSubmit = async () => {
     if (!solutionId) {
@@ -269,14 +263,14 @@ const Solve = () => {
             <button
                 className="AI-commentary-btn"
                 disabled={!aiEnabled}
-                onClick={handleToggleAI}
+                onClick={() => setShowAIComment((prev) => !prev)}
                 style={{
                 opacity: aiEnabled ? 1 : 0.5,
                 cursor: aiEnabled ? "pointer" : "not-allowed",
                 color: "white",
                 }}
             >
-                {showAI ? "문제 보기" : "AI 해설 보기"}
+                {showAIComment ? "문제 보기" : "AI 해설 보기"}
             </button>
             </div>
 
@@ -321,9 +315,15 @@ const Solve = () => {
 
                     <section className="example-section">
                         <h2>입출력 예시 1</h2>
-                        <div className="content-box">예시 내용</div>
+                        <div className='content-inout'>
+                            <div className="content-box">{problem.examples[0].input}</div>
+                            <div className="content-box">{problem.examples[0].output}</div>
+                        </div>
                         <h2>입출력 예시 2</h2>
-                        <div className="content-box">예시 내용</div>
+                        <div className='content-inout'>
+                            <div className="content-box">{problem.examples[1].input}</div>
+                            <div className="content-box">{problem.examples[1].output}</div>
+                        </div>
                     </section>
                     </>
                 )}
@@ -338,22 +338,22 @@ const Solve = () => {
                         
                         <div className="canvas-item">
                             <h3>1. 문제 요약</h3>
-                            <textarea readOnly value={canvasData.editorial.summary} />       
+                            <textarea readOnly value={editorial.summary} />
                         </div>
 
                         <div className="canvas-item">
                         <h3>2. 해결 전략 및 접근법</h3>
-                        <textarea readOnly value={canvasData.editorial.strategy} />
+                        <textarea readOnly value={editorial.strategy} />
                         </div>
 
                         <div className="canvas-item">
                         <h3>3. 시간/공간 복잡도 분석</h3>
-                        <textarea readOnly value={canvasData.editorial.complexity.timeAndSpace} />
+                        <textarea readOnly value={editorial.complexity.timeAndSpace} />
                         </div>
 
                         <div className="canvas-item">
                         <h3>4. 의사 코드 (Pseudocode)</h3>
-                        <textarea readOnly value={canvasData.editorial.pseudocode} />
+                        <textarea readOnly value={editorial.pseudocode} />
                         </div>
                     </section>
                 )}
